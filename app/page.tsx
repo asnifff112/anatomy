@@ -1,6 +1,7 @@
 "use client";
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import EncryptedText from '@/components/ui/EncryptedText'; // Import cheyyan marakkanda!
 
 export default function Home() {
   return (
@@ -17,9 +18,11 @@ export default function Home() {
         <h1 className="text-[15vw] font-black tracking-tighter leading-tight select-none">
           ANATOMY
         </h1>
-        <p className="text-[12px] md:text-sm tracking-[0.6em] uppercase opacity-50 -mt-4">
-          See beyond the surface
-        </p>
+
+        {/* Updated Tagline with Encrypted Effect */}
+        <div className="text-[12px] md:text-sm tracking-[0.6em] uppercase opacity-50 -mt-4">
+          <EncryptedText text="See beyond the surface" />
+        </div>
         
         <div className="mt-20">
           <Link href="/products/headphone-01">
