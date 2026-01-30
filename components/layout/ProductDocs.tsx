@@ -14,7 +14,7 @@ export default function ProductDock() {
     <div className="fixed bottom-10 left-1/2 -translate-x-1/2 z-50">
       <motion.div 
         initial={{ y: 50, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
+        animate={{ y: 0, opacity: 2 }}
         className="flex items-center gap-2 p-3 bg-white/5 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-2xl"
       >
         {icons.map((item, index) => (
