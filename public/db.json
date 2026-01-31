@@ -1,0 +1,44 @@
+{
+  "cars": [
+    {
+      "id": "valor-01",
+      "name": "Airtsel Valor Proiettile",
+      "modelUrl": "/car.glb",
+      "stats": {
+        "engine": "V12 Quad-Turbo",
+        "power": "850 HP"
+      },
+      "parts": [
+        {
+          "id": "engine_v12",
+          "name": "V12 Engine Block",
+          "description": "The core power unit, custom titanium alloy with high-rev limit.",
+          "price": "$45,000"
+        },
+        {
+          "id": "rims_set",
+          "name": "Aero Rims",
+          "description": "Turbine design wheels specifically for brake cooling.",
+          "price": "$12,000"
+        }
+      ]
+    },
+    {
+      "id": "bmw-02",
+      "name": "BMW M-Anatomy",
+      "modelUrl": "/bmw.glb",
+      "stats": {
+        "engine": "Inline-6 Twin-Turbo",
+        "power": "510 HP"
+      },
+      "parts": [
+        {
+          "id": "m_engine",
+          "name": "M-Performance Core",
+          "description": "Precision-tuned straight-six for maximum track performance.",
+          "price": "$18,500"
+        }
+      ]
+    }
+  ]
+}

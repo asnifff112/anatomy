@@ -1,50 +1,85 @@
 "use client";
+import { useState, useEffect } from "react";
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 
-const products = [
-  { id: 'headphone-01', name: 'Sonic-01', type: 'Audio', status: 'Active' },
-  { id: 'watch-01', name: 'Chronos', type: 'Wearable', status: 'Incoming' },
-  { id: 'shoe-01', name: 'Aero-Max', type: 'Footwear', status: 'Locked' },
-];
-
 export default function TheLab() {
+  const [cars, setCars] = useState<any[]>([]);
+
+  useEffect(() => {
+    // db.json-il ninnu car details fetch cheyyunnu
+    fetch("/db.json")
+      .then((res) => res.json())
+      .then((data) => setCars(data.cars));
+  }, []);
+
   return (
     <main className="min-h-screen bg-black pt-32 pb-20 px-6 md:px-20">
+      
+      {/* HEADER SECTION */}
       <div className="flex justify-between items-end mb-16 border-b border-white/10 pb-10">
-        <div>
-          <h1 className="text-5xl font-black tracking-tighter italic uppercase">The Lab.</h1>
-          <p className="text-[10px] tracking-[0.5em] text-gray-500 uppercase mt-2">Active Experiments & Prototypes</p>
-        </div>
-        <div className="text-right hidden md:block">
-          <span className="text-[10px] text-white/20 tracking-widest uppercase">Location: Neo-Tokyo / 2026</span>
+        <motion.div 
+          initial={{ opacity: 0, x: -20 }} 
+          animate={{ opacity: 1, x: 0 }}
+        >
+          <h1 className="text-6xl font-black tracking-tighter italic uppercase leading-none">The Lab.</h1>
+          <p className="text-[10px] tracking-[0.5em] text-blue-500 font-bold uppercase mt-4">
+            Authorized Personnel Only // Database_v2.0
+          </p>
+        </motion.div>
+        
+        <div className="text-right hidden md:block opacity-30 font-mono">
+          <span className="text-[10px] text-white tracking-widest uppercase">System Status: Operational</span>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {products.map((item) => (
-          <Link href={item.status === 'Active' ? `/products/${item.id}` : '#'} key={item.id}>
+      {/* CAR CARDS GRID */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {cars.map((car) => (
+          <Link href={`/products/${car.id}`} key={car.id}>
             <motion.div 
-              whileHover={item.status === 'Active' ? { y: -10, borderColor: 'rgba(255,255,255,0.3)' } : {}}
-              className={`relative p-8 h-[400px] border border-white/5 rounded-[2rem] overflow-hidden flex flex-col justify-between transition-colors
-                ${item.status === 'Active' ? 'bg-white/5 cursor-pointer' : 'bg-transparent opacity-40 cursor-not-allowed'}
-              `}
+              whileHover={{ scale: 0.98, borderColor: 'rgba(59,130,246,0.5)' }}
+              className="relative p-8 h-[450px] border border-white/5 rounded-[2.5rem] overflow-hidden flex flex-col justify-between bg-zinc-950 transition-all group"
             >
-              <div className="flex justify-between items-start">
-                <span className="text-[10px] tracking-widest uppercase py-1 px-3 border border-white/10 rounded-full">{item.type}</span>
-                <span className={`text-[9px] font-bold tracking-widest uppercase ${item.status === 'Active' ? 'text-green-500' : 'text-red-500'}`}>
-                   ● {item.status}
+              {/* TOP INFO */}
+              <div className="flex justify-between items-start z-10">
+                <span className="text-[10px] tracking-widest uppercase py-1.5 px-4 bg-white/5 border border-white/10 rounded-full font-mono text-gray-400">
+                  {car.id}
+                </span>
+                <span className="text-[9px] font-black tracking-[0.2em] uppercase text-green-500 flex items-center gap-2">
+                   <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
+                   Active_Subject
                 </span>
               </div>
 
-              {/* Placeholder for Product Visual */}
-              <div className="absolute inset-0 flex items-center justify-center opacity-20 pointer-events-none text-[80px] font-black italic">
-                {item.name[0]}
+              {/* 🏎️ CAR IMAGE (Centered in Card) */}
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none p-6">
+                <motion.img 
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 0.6, scale: 1 }}
+                  whileHover={{ opacity: 1, scale: 1.1 }}
+                  transition={{ duration: 0.5 }}
+                  // db.json-il car image path illenkil manually kodukkam
+                  // eg: /thumbs/valor-01.png
+                  src={`/thumbs/${car.id}.png`} 
+                  alt={car.name}
+                  className="w-full h-auto object-contain drop-shadow-[0_0_30px_rgba(0,0,0,0.8)] z-0 transition-all duration-500 group-hover:drop-shadow-[0_0_40px_rgba(59,130,246,0.2)]"
+                />
               </div>
 
-              <div>
-                <h3 className="text-3xl font-bold tracking-tighter uppercase leading-tight">{item.name}</h3>
-                <p className="text-[10px] tracking-widest text-gray-500 mt-2 uppercase">View Internal Structure →</p>
+              {/* BOTTOM DETAILS */}
+              <div className="z-10 bg-gradient-to-t from-zinc-950 via-zinc-950/80 to-transparent pt-10">
+                <h3 className="text-4xl font-black tracking-tighter uppercase italic leading-none mb-2">
+                  {car.name}
+                </h3>
+                <div className="flex items-center justify-between">
+                  <p className="text-[10px] tracking-widest text-blue-500 font-bold uppercase">
+                    Scan Anatomy →
+                  </p>
+                  <p className="text-[10px] font-mono text-gray-600 uppercase">
+                    {car.stats.power}
+                  </p>
+                </div>
               </div>
             </motion.div>
           </Link>
