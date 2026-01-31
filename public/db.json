@@ -13,7 +13,9 @@
           "id": "engine_v12",
           "name": "V12 Engine Block",
           "description": "The core power unit, custom titanium alloy with high-rev limit.",
-          "price": "$45,000"
+          "price": "$45,000",
+          "image": "/parts/engine_v12.png"
+          
         },
         {
           "id": "rims_set",
