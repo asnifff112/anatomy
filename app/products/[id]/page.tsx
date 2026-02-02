@@ -9,7 +9,7 @@ export default function ProductDetailsPage() {
   const [car, setCar] = useState<any>(null);
 
   useEffect(() => {
-    // db.json ഫെച്ച് ചെയ്യുന്നു
+   
     fetch("/db.json")
       .then((res) => res.json())
       .then((data) => {
@@ -22,11 +22,10 @@ export default function ProductDetailsPage() {
 
   return (
     <main className="bg-black">
-      {/* 🏎️ Hero Section with 3D Model */}
+    
       <section className="h-screen relative flex flex-col items-center justify-center">
         <div className="absolute inset-0 z-0">
-           {/* നിന്റെ Three.js Canvas ഇവിടെ വെക്കുക */}
-           {/* <CarCanvas modelUrl={car.modelUrl} /> */}
+           
         </div>
         
         <div className="relative z-10 text-center space-y-4">
