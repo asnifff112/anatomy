@@ -8,37 +8,72 @@
         "engine": "V12 Quad-Turbo",
         "power": "850 HP"
       },
+      "features": [
+        {
+          "id": "f1",
+          "title": "V12 Propulsion Core",
+          "description": "Custom titanium alloy block with high-rev limit for extreme laboratory testing.",
+          "video": "/videos/valor-engine-loop.mp4"
+        },
+        {
+          "id": "f2",
+          "title": "Aero Dynamics",
+          "description": "Active wing flaps that adjust based on downforce requirements.",
+          "video": "/videos/valor-aero.mp4"
+        }
+      ],
       "parts": [
         {
           "id": "engine_v12",
           "name": "V12 Engine Block",
-          "description": "The core power unit, custom titanium alloy with high-rev limit.",
+          "description": "The core power unit, custom titanium alloy.",
           "price": "$45,000",
           "image": "/parts/engine_v12.png"
-          
         },
         {
           "id": "rims_set",
           "name": "Aero Rims",
           "description": "Turbine design wheels specifically for brake cooling.",
-          "price": "$12,000"
+          "price": "$12,000",
+          "image": "/parts/rims.png"
         }
       ]
     },
     {
-      "id": "bmw-02",
-      "name": "BMW M-Anatomy",
+      "id": "m4-competition",
+      "name": "BMW M4 Competition",
       "modelUrl": "/bmw.glb",
       "stats": {
         "engine": "Inline-6 Twin-Turbo",
         "power": "510 HP"
       },
+      "features": [
+        {
+          "id": "f1",
+          "title": "S58 M TwinPower Turbo",
+          "description": "The heart of the M4. A 3.0-liter straight-six engine delivering 510 HP.",
+          "video": "/engine/bmw-engine.mp4"
+        },
+        {
+          "id": "f2",
+          "title": "Carbon Fiber Bonnet",
+          "description": "Lightweight bonnet with integrated air ducts for optimized cooling.",
+          "video": "/bonet/bmw-bonnet.mp4"
+        },
+        {
+          "id": "f3",
+          "title": "Matrix LED Tech",
+          "description": "Adaptive lighting system that adjusts beam patterns in milliseconds.",
+          "video": "/gear/bmw-gear.mp4"
+        }
+      ],
       "parts": [
         {
           "id": "m_engine",
           "name": "M-Performance Core",
           "description": "Precision-tuned straight-six for maximum track performance.",
-          "price": "$18,500"
+          "price": "$18,500",
+          "image": "/parts/bmw-engine.png"
         }
       ]
     }

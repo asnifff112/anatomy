@@ -1,11 +1,13 @@
 "use client";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Stage, useGLTF, Environment, Float, useAnimations, OrbitControls, ScrollControls, useScroll } from "@react-three/drei";
+import { 
+  Stage, useGLTF, Environment, Float, useAnimations, 
+  OrbitControls, ScrollControls, useScroll, MeshReflectorMaterial, ContactShadows 
+} from "@react-three/drei";
 import { Suspense, useRef, useEffect, useLayoutEffect } from "react";
 import * as THREE from "three";
 import gsap from "gsap";
 
-// Props interface 
 interface ViewProps {
   modelUrl: string;
   isExploded?: boolean;
@@ -17,9 +19,8 @@ function Model({ url, isExploded, customScale }: { url: string; isExploded?: boo
   const { scene, animations } = useGLTF(url);
   const { actions } = useAnimations(animations, group);
   const scroll = useScroll();
-  const tl = useRef<any>(null); // Type error fix cheyyaan 'any' upayogichu
+  const tl = useRef<any>(null);
 
-  // Door/Bonnet animations from your original logic
   useEffect(() => {
     if (actions) {
       Object.values(actions).forEach((action) => {
@@ -36,18 +37,14 @@ function Model({ url, isExploded, customScale }: { url: string; isExploded?: boo
     }
   }, [actions, isExploded]);
 
-  // GSAP Scroll Logic for Parts Deconstruction
   useLayoutEffect(() => {
     tl.current = gsap.timeline({ paused: true });
-
     scene.traverse((child) => {
       if ((child as THREE.Mesh).isMesh) {
-        // Model-ile parts identification based on names
         if (child.name.toLowerCase().includes("engine")) {
           tl.current.to(child.position, { y: 1.2, z: 0.5, duration: 1 }, 0);
         }
         if (child.name.toLowerCase().includes("wheel") || child.name.toLowerCase().includes("tyre")) {
-          // Wheels sideways move aakan
           const direction = child.position.x > 0 ? 0.8 : -0.8;
           tl.current.to(child.position, { x: direction, duration: 1 }, 0);
         }
@@ -55,7 +52,6 @@ function Model({ url, isExploded, customScale }: { url: string; isExploded?: boo
     });
   }, [scene]);
 
-  // Sync GSAP timeline with Drei Scroll
   useFrame(() => {
     if (tl.current) {
       tl.current.seek(scroll.offset * tl.current.duration());
@@ -68,7 +64,7 @@ function Model({ url, isExploded, customScale }: { url: string; isExploded?: boo
         ref={group}
         object={scene} 
         scale={customScale} 
-        position={[0, -0.6, -1.5]} 
+        position={[0, -0.2, 0]} // Position adjusted for platform
         rotation={[0, -Math.PI / 6, 0]} 
       />
     </Float>
@@ -77,20 +73,50 @@ function Model({ url, isExploded, customScale }: { url: string; isExploded?: boo
 
 export default function View({ modelUrl, isExploded, scale = 1.3 }: ViewProps) {
   return (
-    <div className="h-full w-full outline-none">
+    <div className="h-full w-full outline-none bg-transparent">
       <Canvas 
         shadows 
         dpr={[1, 1.5]} 
-        camera={{ position: [0, 0, 5], fov: 35 }}
+        camera={{ position: [0, 1, 5], fov: 35 }}
         gl={{ antialias: true, powerPreference: "high-performance" }}
       >
         <Suspense fallback={null}>
-          {/* ScrollControls add cheythu - 3 pages scroll length */}
           <ScrollControls pages={isExploded ? 3 : 0} damping={0.2}>
             <Stage environment="city" intensity={0.5} adjustCamera={false}>
               <Model url={modelUrl} isExploded={isExploded} customScale={scale} />
             </Stage>
+
+            {/* ✨ THE ROUND PLATFORM SECTION */}
+            <group position={[0, -0.65, 0]}>
+              <mesh rotation={[-Math.PI / 2, 0, 0]}>
+                <circleGeometry args={[4, 64]} />
+                <MeshReflectorMaterial
+                  blur={[300, 100]}
+                  resolution={1024}
+                  mixBlur={1}
+                  mixStrength={50}
+                  roughness={1}
+                  depthScale={1.2}
+                  minDepthThreshold={0.4}
+                  maxDepthThreshold={1.4}
+                  color="#151515" // Dark base color for the lab look
+                  metalness={0.6}
+                />
+              </mesh>
+              
+              {/* Soft shadow on the platform */}
+              <ContactShadows 
+                opacity={0.4} 
+                scale={10} 
+                blur={2} 
+                far={1.5} 
+                color="#000000" 
+              />
+            </group>
+
           </ScrollControls>
+          
+          {/* Environment changes based on the lab theme */}
           <Environment preset="night" />
         </Suspense>
 
