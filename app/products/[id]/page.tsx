@@ -27,7 +27,7 @@ export default function ProductDetails() {
   useEffect(() => {
     if (!carData) return;
 
-    // GSAP Context create cheyyunnu (Cleaner cleanup)
+   
     let ctx = gsap.context(() => {
       const sections = gsap.utils.toArray(".part-section");
       
@@ -36,7 +36,7 @@ export default function ProductDetails() {
         const imageContainer = section.querySelector(".anim-image-container"); 
         const text = section.querySelector(".part-text");
 
-        // ✨ Optimized GSAP Animation
+       
         gsap.fromTo(imageContainer, 
           { x: isEven ? -100 : 100, opacity: 0 }, 
           { 
