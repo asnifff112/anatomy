@@ -67,7 +67,7 @@ export default function ProductDetails() {
           }
         );
       });
-    }, containerRef); // Scope to container
+    }, containerRef); 
 
     return () => ctx.revert(); // Proper cleanup
   }, [carData]);
@@ -84,7 +84,7 @@ export default function ProductDetails() {
       {/* SECTION 1: HERO */}
       <section className="relative min-h-screen flex flex-col md:flex-row border-b border-white/5">
         <div className="w-full md:w-2/3 h-[60vh] md:h-screen sticky top-0 md:relative">
-          {/* 3D Model Heavy aanenkil athine onnu 'memo' cheyyunnath nallathanu */}
+          
           <View modelUrl={carData.modelUrl} isExploded={isExploded} scale={0.5} />
         </div>
         <div className="w-full md:w-1/3 p-10 flex flex-col justify-center bg-zinc-950/80 backdrop-blur-xl z-10">
@@ -109,27 +109,27 @@ export default function ProductDetails() {
           <section key={part.id} className="part-section min-h-[80vh] flex items-center justify-center px-6 md:px-20 mb-20">
             <div className={`flex flex-col md:flex-row items-center justify-between w-full max-w-7xl gap-10 ${index % 2 === 0 ? "" : "md:flex-row-reverse"}`}>
               
-              {/* ✨ PERFORMANCE FIX: 'will-change-transform' tells browser to use GPU */}
+              
               <div className="anim-image-container w-full md:w-1/2 flex justify-center opacity-0 will-change-transform">
                 
-                {/* Floating Animation Wrapper */}
+             
                 <motion.div
                    animate={{ y: [0, -15, 0] }}
                    transition={{ 
-                     duration: 5, // Slower animation consumes less resources
+                     duration: 5, 
                      repeat: Infinity, 
                      ease: "easeInOut",
                      delay: index * 0.2
                    }}
-                   className="relative w-full max-w-[400px] aspect-square" // Aspect Ratio defined
+                   className="relative w-full max-w-[400px] aspect-square" 
                 >
-                    {/* ✨ NEXT/IMAGE: Highly Optimized Image Rendering */}
+                    
                     <Image 
                        src={part.image || `/parts/${part.id}.png`} 
                        alt={part.name}
-                       width={600} // Rendering size kodukkuka
+                       width={600} 
                        height={600}
-                       priority={index < 2} // Aadyathe 2 images pettannu load aavan
+                       priority={index < 2} 
                        className="object-contain drop-shadow-[0_20px_60px_rgba(59,130,246,0.3)]"
                     />
                 </motion.div>
