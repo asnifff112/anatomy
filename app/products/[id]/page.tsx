@@ -5,7 +5,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useParams } from "next/navigation";
 import { motion } from "framer-motion";
-import Image from "next/image"; // ✨ 1. Import Next.js Image
+import Image from "next/image"; 
 
 gsap.registerPlugin(ScrollTrigger);
 
