@@ -7,47 +7,50 @@ export default function Navbar() {
   const pathname = usePathname();
 
   const links = [
-    { name: 'Home', path: '/' },
+     { name: 'Home', path: '/' },
+
     { name: 'Inside', path: '/about' },
+
     { name: 'Lab', path: '/lab' }
   ];
 
   return (
-    <div className="fixed top-8 left-1/2 -translate-x-1/2 z-[100]">
+    <div className="fixed top-6 left-1/2 -translate-x-1/2 z-[100] w-full max-w-fit">
       <motion.nav 
-        initial={{ y: -100, width: "100px", opacity: 0 }}
-        animate={{ y: 0, width: "auto", opacity: 1 }}
-        transition={{ 
-          type: "spring", 
-          stiffness: 100, 
-          damping: 15,
-          delay: 0.2
+        initial={{ y: -50, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        className="relative flex items-center gap-4 px-6 py-2 bg-[#0a0a0a]/80 backdrop-blur-3xl border-x border-t border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.8)]"
+        style={{
+          // Car Body Shape using Clip-path
+          clipPath: "polygon(5% 0%, 95% 0%, 100% 50%, 95% 100%, 5% 100%, 0% 50%)",
+          borderRadius: "20px"
         }}
-        className="flex items-center gap-1 p-2 bg-[#1a1a1a]/90 backdrop-blur-2xl border border-white/10 rounded-full shadow-[0_10px_40px_rgba(0,0,0,0.5)]"
       >
-        {/* Brand Icon (Left Side) */}
-        <Link href="/" className="w-10 h-10 bg-white rounded-full flex items-center justify-center mr-2 hover:scale-90 transition-transform">
-          <span className="text-black font-black text-xs">A.</span>
+        {/* 🏮 Left "Headlight" Glow */}
+        <div className="absolute left-2 top-1/2 -translate-y-1/2 w-1 h-4 bg-blue-500 rounded-full blur-[4px] opacity-50" />
+
+        {/* Brand Icon */}
+        <Link href="/" className="relative z-10 w-8 h-8 bg-gradient-to-br from-white to-zinc-400 rounded-md rotate-45 flex items-center justify-center hover:scale-110 transition-transform">
+          <span className="text-black font-black text-[10px] -rotate-45 italic">A.</span>
         </Link>
 
-        {/* Links (Center) */}
-        <div className="flex items-center bg-black/40 rounded-full px-2 py-1">
+        {/* Links Container */}
+        <div className="flex items-center gap-1 bg-white/5 rounded-full px-2 py-1 border border-white/5">
           {links.map((link) => {
             const isActive = pathname === link.path;
             return (
               <Link key={link.name} href={link.path}>
-                <div className={`relative px-5 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all duration-300 ${
-                  isActive ? 'text-black' : 'text-white/60 hover:text-white'
+                <div className={`relative px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-[0.2em] transition-all duration-300 ${
+                  isActive ? 'text-black' : 'text-white/50 hover:text-white'
                 }`}>
-                  {/* Active Background Pill - Fixed Color Logic */}
                   {isActive && (
                     <motion.div 
                       layoutId="nav-pill"
-                      className="absolute inset-0 bg-white rounded-full" 
+                      className="absolute inset-0 bg-white" 
+                      style={{ borderRadius: "inherit" }}
                       transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                     />
                   )}
-                  {/* Text needs high z-index to sit on top of the pill */}
                   <span className="relative z-10">{link.name}</span>
                 </div>
               </Link>
@@ -55,9 +58,24 @@ export default function Navbar() {
           })}
         </div>
 
-        {/* Action Button (Right Side) */}
-       
+        {/* 🛠️ Signup Button (GENERATE ID) */}
+        <Link href="/signup">
+          <motion.button 
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="px-4 py-2 bg-red-600 hover:bg-red-500 text-white text-[9px] font-black uppercase tracking-tighter italic rounded-sm transition-colors shadow-[4px_0_15px_rgba(220,38,38,0.3)]"
+            style={{ clipPath: "polygon(10% 0, 100% 0, 90% 100%, 0% 100%)" }}
+          >
+            Generate ID
+          </motion.button>
+        </Link>
+
+        {/* 🏮 Right "Taillight" Glow */}
+        <div className="absolute right-2 top-1/2 -translate-y-1/2 w-1 h-4 bg-red-500 rounded-full blur-[4px] opacity-50" />
       </motion.nav>
+
+      {/* Underline Decoration for "Aero" look */}
+      <div className="w-[80%] h-[1px] bg-gradient-to-r from-transparent via-blue-500/50 to-transparent mx-auto mt-1 opacity-40" />
     </div>
   );
 }
