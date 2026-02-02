@@ -47,7 +47,7 @@ export default function ProductDetails() {
               trigger: section,
               start: "top 85%", // Trigger point kurachu koodi thazhe aakki
               end: "top 40%",
-              scrub: 1, // Smooth scrub
+              scrub: 1, 
             }
           }
         );
@@ -69,7 +69,7 @@ export default function ProductDetails() {
       });
     }, containerRef); 
 
-    return () => ctx.revert(); // Proper cleanup
+    return () => ctx.revert(); 
   }, [carData]);
 
   if (!carData) return (
