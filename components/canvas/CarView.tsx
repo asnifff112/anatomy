@@ -52,7 +52,7 @@ function Model({ url, color }: { url: string; color: string }) {
     });
   }, [scene, color]);
 
-  return <primitive object={scene} scale={1.3} position={[0, -0.2, 0]} />;
+  return <primitive object={scene} scale={1} position={[0, -0.2, 0]} />;
 }
 
 export default function CarView({ modelUrl, selectedColor }: { modelUrl: string; selectedColor: string }) {
