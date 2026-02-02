@@ -38,14 +38,14 @@ export default function ProductDetails() {
 
         // ✨ Optimized GSAP Animation
         gsap.fromTo(imageContainer, 
-          { x: isEven ? -100 : 100, opacity: 0 }, // Distance kurachu (Less pixel movement = less lag)
+          { x: isEven ? -100 : 100, opacity: 0 }, 
           { 
             x: 0, opacity: 1, 
             duration: 1,
-            ease: "power2.out", // Smooth easing
+            ease: "power2.out", 
             scrollTrigger: {
               trigger: section,
-              start: "top 85%", // Trigger point kurachu koodi thazhe aakki
+              start: "top 85%",
               end: "top 40%",
               scrub: 1, 
             }
