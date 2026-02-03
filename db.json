@@ -92,6 +92,17 @@
       "email": "ponnus@gmail.com",
       "password": "123456",
       "callsign": "nafff-1"
+    },
+    {
+      "id": "1705",
+      "name": "asnif",
+      "email": "asnifkl@gmail.com",
+      "password": "123456",
+      "callsign": "azii-1",
+      "wishlist": [
+        "m4-competition",
+        "valor-01"
+      ]
     }
   ]
 }

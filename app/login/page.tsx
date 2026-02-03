@@ -34,7 +34,7 @@ export default function LoginPage() {
     const success = await login(email, password);
 
     if (success) {
-      router.push("/home");
+      router.push("/");
     } else {
       setError("Invalid email or password");
     
