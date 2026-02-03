@@ -1,5 +1,6 @@
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import { AuthProvider } from "@/app/context/AuthContext";
 import "./globals.css";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

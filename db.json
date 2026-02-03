@@ -77,5 +77,21 @@
         }
       ]
     }
+  ],
+  "users": [
+    {
+      "id": "1",
+      "name": "Admin Pilot",
+      "email": "admin@velocity.com",
+      "password": "password123",
+      "callsign": "OVERLORD"
+    },
+    {
+      "id": "2",
+      "name": "nafila",
+      "email": "ponnus@gmail.com",
+      "password": "123456",
+      "callsign": "nafff-1"
+    }
   ]
 }
