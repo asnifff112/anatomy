@@ -1,8 +1,8 @@
 "use client";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { 
-  Stage, useGLTF, Environment, Float, useAnimations, 
-  OrbitControls, ScrollControls, useScroll, MeshReflectorMaterial, ContactShadows 
+  useGLTF, Environment, Float, useAnimations, 
+  OrbitControls, ScrollControls, useScroll, MeshReflectorMaterial, ContactShadows, Center
 } from "@react-three/drei";
 import { Suspense, useRef, useEffect, useLayoutEffect } from "react";
 import * as THREE from "three";
@@ -14,49 +14,39 @@ interface ViewProps {
   scale?: number;
 }
 
-function Model({ url, isExploded, customScale }: { url: string; isExploded?: boolean; customScale: number }) {
+// 🏎️ 1. ഇത് കാർ ലോഡ് ചെയ്യാനുള്ള ഫങ്ക്ഷൻ
+function CarModel({ url, isExploded, customScale }: { url: string; isExploded?: boolean; customScale: number }) {
   const group = useRef<THREE.Group>(null);
   const { scene, animations } = useGLTF(url);
   const { actions } = useAnimations(animations, group);
   const scroll = useScroll();
   const tl = useRef<any>(null);
 
+  // 🔥 ഈ ലോജിക് ആണ് BMW-വിനെയും Porsche-യെയും ഒരേ സൈസ് ആക്കുന്നത്
+  useLayoutEffect(() => {
+    if (scene) {
+      const box = new THREE.Box3().setFromObject(scene);
+      const center = new THREE.Vector3();
+      box.getCenter(center);
+      scene.position.sub(center); 
+
+      const size = new THREE.Vector3();
+      box.getSize(size);
+      const maxDim = Math.max(size.x, size.y, size.z);
+      
+      // കാർ എത്ര വലുതായാലും ചെറുതായാലും അതിനെ 3.5 എന്ന സൈസിലേക്ക് മാറ്റും
+      const scaleFactor = 3.5 / maxDim; 
+      scene.scale.setScalar(scaleFactor);
+    }
+  }, [scene, url]);
+
   useEffect(() => {
     if (actions) {
       Object.values(actions).forEach((action) => {
-        if (isExploded !== undefined) {
-          if (isExploded) {
-            action?.play().fadeIn(1);
-          } else {
-            action?.fadeOut(1).stop();
-          }
-        } else {
-          action?.play().fadeIn(1);
-        }
+        isExploded ? action?.play().fadeIn(1) : action?.fadeOut(1).stop();
       });
     }
   }, [actions, isExploded]);
-
-  useLayoutEffect(() => {
-    tl.current = gsap.timeline({ paused: true });
-    scene.traverse((child) => {
-      if ((child as THREE.Mesh).isMesh) {
-        if (child.name.toLowerCase().includes("engine")) {
-          tl.current.to(child.position, { y: 1.2, z: 0.5, duration: 1 }, 0);
-        }
-        if (child.name.toLowerCase().includes("wheel") || child.name.toLowerCase().includes("tyre")) {
-          const direction = child.position.x > 0 ? 0.8 : -0.8;
-          tl.current.to(child.position, { x: direction, duration: 1 }, 0);
-        }
-      }
-    });
-  }, [scene]);
-
-  useFrame(() => {
-    if (tl.current) {
-      tl.current.seek(scroll.offset * tl.current.duration());
-    }
-  });
 
   return (
     <Float speed={isExploded ? 0 : 0.8} rotationIntensity={0.1} floatIntensity={0.1}>
@@ -64,30 +54,29 @@ function Model({ url, isExploded, customScale }: { url: string; isExploded?: boo
         ref={group}
         object={scene} 
         scale={customScale} 
-        position={[0, -0.2, 0]} // Position adjusted for platform
         rotation={[0, -Math.PI / 6, 0]} 
       />
     </Float>
   );
 }
 
-export default function View({ modelUrl, isExploded, scale = 1.3 }: ViewProps) {
+// 🌍 2. ഇതാണ് ലബിൽ നീ വിളിക്കുന്ന മെയിൻ കോമ്പോണന്റ്
+export default function View({ modelUrl, isExploded, scale = 1 }: ViewProps) {
   return (
     <div className="h-full w-full outline-none bg-transparent">
-      <Canvas 
-        shadows 
-        dpr={[1, 1.5]} 
-        camera={{ position: [0, 1, 5], fov: 35 }}
-        gl={{ antialias: true, powerPreference: "high-performance" }}
-      >
+      <Canvas shadows dpr={[1, 1.5]} camera={{ position: [0, 1, 5], fov: 35 }}>
         <Suspense fallback={null}>
           <ScrollControls pages={isExploded ? 3 : 0} damping={0.2}>
-            <Stage environment="city" intensity={0.5} adjustCamera={false}>
-              <Model url={modelUrl} isExploded={isExploded} customScale={scale} />
-            </Stage>
+            
+            <ambientLight intensity={0.7} />
+            <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1} />
 
-            {/* ✨ THE ROUND PLATFORM SECTION */}
-            <group position={[0, -0.65, 0]}>
+            <Center top>
+               <CarModel url={modelUrl} isExploded={isExploded} customScale={scale} />
+            </Center>
+
+            {/* പ്ലാറ്റ്‌ഫോം */}
+            <group position={[0, -0.6, 0]}>
               <mesh rotation={[-Math.PI / 2, 0, 0]}>
                 <circleGeometry args={[4, 64]} />
                 <MeshReflectorMaterial
@@ -97,39 +86,18 @@ export default function View({ modelUrl, isExploded, scale = 1.3 }: ViewProps) {
                   mixStrength={50}
                   roughness={1}
                   depthScale={1.2}
-                  minDepthThreshold={0.4}
-                  maxDepthThreshold={1.4}
-                  color="#151515" // Dark base color for the lab look
+                  color="#151515" 
                   metalness={0.6}
                 />
               </mesh>
-              
-              {/* Soft shadow on the platform */}
-              <ContactShadows 
-                opacity={0.4} 
-                scale={10} 
-                blur={2} 
-                far={1.5} 
-                color="#000000" 
-              />
+              <ContactShadows opacity={0.4} scale={10} blur={2} far={1.5} color="#000000" />
             </group>
 
           </ScrollControls>
-          
-          {/* Environment changes based on the lab theme */}
-          <Environment preset="night" />
+          <Environment preset="city" />
         </Suspense>
-
-        <OrbitControls 
-          enableZoom={false} 
-          enablePan={false}
-          autoRotate={isExploded !== undefined && !isExploded} 
-          autoRotateSpeed={0.5}
-          makeDefault 
-        />
+        <OrbitControls enableZoom={false} enablePan={false} makeDefault />
       </Canvas>
     </div>
   );
 }
-
-useGLTF.preload("/car.glb");

@@ -60,7 +60,7 @@ export default function CarView({ modelUrl, selectedColor }: { modelUrl: string;
     <div className="h-full w-full">
       <Canvas shadows dpr={[1, 2]} camera={{ position: [0, 2, 6], fov: 35 }}>
         <Suspense fallback={null}>
-          <Stage environment="city" intensity={0.5} adjustCamera={false}>
+          <Stage environment="city" intensity={0.5} adjustCamera={1.5}>
             <Model url={modelUrl} color={selectedColor} />
           </Stage>
           <OrbitControls 

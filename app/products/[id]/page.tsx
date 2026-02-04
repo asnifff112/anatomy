@@ -78,10 +78,10 @@ export default function ProductDetailsPage() {
       const isInWishlist = updatedWishlist.includes(id);
 
       if (isInWishlist) {
-        // REMOVE logic
+       
         updatedWishlist = updatedWishlist.filter((itemId: string) => itemId !== id);
       } else {
-        // ADD logic
+        
         updatedWishlist = [...updatedWishlist, id];
       }
 
@@ -120,7 +120,7 @@ export default function ProductDetailsPage() {
         </div>
 
         {/* 🏎️ Car Display Area */}
-        <div className="relative z-10 w-full h-[60vh] mt-4">
+        <div className="relative z-10 w-full h-[75vh] mt-4">
           <CarView modelUrl={car.modelUrl} selectedColor={selectedColor} />
           
           {/* Right Side Control Panel */}

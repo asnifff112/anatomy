@@ -13,7 +13,6 @@ export default function InsideAnatomy() {
 
   useEffect(() => {
     let ctx = gsap.context(() => {
-      // Feature cards scroll trigger
       gsap.from(".feature-card", {
         y: 100,
         opacity: 0,
@@ -27,7 +26,6 @@ export default function InsideAnatomy() {
         }
       });
 
-      // Background lines movement
       gsap.to(".bg-line", {
         height: "100%",
         duration: 2,

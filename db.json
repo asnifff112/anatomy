@@ -1,44 +1,48 @@
 {
   "cars": [
     {
-      "id": "valor-01",
-      "name": "Airtsel Valor Proiettile",
-      "modelUrl": "/car.glb",
-      "stats": {
-        "engine": "V12 Quad-Turbo",
-        "power": "850 HP"
-      },
-      "features": [
-        {
-          "id": "f1",
-          "title": "V12 Propulsion Core",
-          "description": "Custom titanium alloy block with high-rev limit for extreme laboratory testing.",
-          "video": "/videos/valor-engine-loop.mp4"
-        },
-        {
-          "id": "f2",
-          "title": "Aero Dynamics",
-          "description": "Active wing flaps that adjust based on downforce requirements.",
-          "video": "/videos/valor-aero.mp4"
-        }
-      ],
-      "parts": [
-        {
-          "id": "engine_v12",
-          "name": "V12 Engine Block",
-          "description": "The core power unit, custom titanium alloy.",
-          "price": "$45,000",
-          "image": "/parts/engine_v12.png"
-        },
-        {
-          "id": "rims_set",
-          "name": "Aero Rims",
-          "description": "Turbine design wheels specifically for brake cooling.",
-          "price": "$12,000",
-          "image": "/parts/rims.png"
-        }
-      ]
+  "id": "porsche-911",
+  "name": "Porsche 911 Carrera S",
+  "modelUrl": "/porsche.glb",
+  "labScale": 1.2, 
+      "cardScale": 0.8,
+  "stats": {
+    "engine": "3.0L Flat-6 Twin-Turbo",
+    "power": "450 HP",
+    "topSpeed": "308 KM/H",
+    "acceleration": "3.7s (0-100)"
+  },
+  "features": [
+    {
+      "id": "f1",
+      "title": "Rear-Engine Core",
+      "description": "The classic flat-six layout, precision-tuned for maximum balance and high-rev performance.",
+      "video": "/videos/porsche-engine.mp4"
     },
+    {
+      "id": "f2",
+      "title": "Active Aero",
+      "description": "Variable rear spoiler and cooling flaps that adapt to speed for optimal downforce.",
+      "video": "/videos/porsche-aero.mp4"
+    }
+  ],
+  "parts": [
+    {
+      "id": "engine_f6",
+      "name": "Flat-6 Performance Block",
+      "description": "Twin-turbocharged boxer engine delivering instantaneous response.",
+      "price": "$38,000",
+      "image": "/parts/porsche_engine.png"
+    },
+    {
+      "id": "rs_rims",
+      "name": "RS Spyder Wheels",
+      "description": "Lightweight forged alloy wheels for enhanced handling and style.",
+      "price": "$8,500",
+      "image": "/parts/porsche_rims.png"
+    }
+  ]
+},
     {
       "id": "m4-competition",
       "name": "BMW M4 Competition",
@@ -100,6 +104,10 @@
       "password": "123456",
       "callsign": "azii-1",
       "wishlist": [
+        {
+          "id": "m4-competition",
+          "color": "#0a0a0a"
+        },
         "m4-competition"
       ]
     }
