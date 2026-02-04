@@ -40,7 +40,6 @@ export default function InsideAnatomy() {
   return (
     <main ref={containerRef} className="relative min-h-screen bg-black pt-32 pb-20 px-6 md:px-20 overflow-hidden">
       
-      {/* Background Aesthetic Lines */}
       <div className="absolute inset-0 flex justify-around pointer-events-none opacity-10">
         {[1, 2, 3, 4].map((i) => (
           <div key={i} className="bg-line w-[1px] h-0 bg-white" />
@@ -65,7 +64,6 @@ export default function InsideAnatomy() {
           </div>
         </motion.div>
 
-        {/* Features Grid with GSAP Animation */}
         <div className="features-grid grid grid-cols-1 md:grid-cols-3 gap-10 mt-32">
           {[
             { title: "Precision", desc: "Every bolt, every gear, rendered in ultra-high fidelity." },
@@ -81,7 +79,6 @@ export default function InsideAnatomy() {
         </div>
       </div>
 
-      {/* Footer Decoration */}
       <div className="mt-40 pt-10 border-t border-white/5 flex justify-between items-center opacity-20 font-mono text-[10px] tracking-widest uppercase">
         <span>Anatomy Lab © 2024</span>
         <span>Secure Access Only</span>
