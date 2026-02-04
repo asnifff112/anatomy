@@ -87,7 +87,6 @@ export default function LoginPage() {
             </div>
           )}
 
-          {/* Login Button */}
           <button 
             disabled={loading}
             className="w-full bg-white text-black font-black uppercase italic p-5 rounded-2xl hover:bg-blue-600 hover:text-white transition-all duration-500 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed group relative overflow-hidden"
@@ -97,7 +96,6 @@ export default function LoginPage() {
           </button>
         </form>
 
-        {/* Footer Link */}
         <div className="mt-8 pt-6 border-t border-white/5 text-center">
           <p className="text-zinc-500 text-[10px] uppercase tracking-widest">
             New Pilot? <Link href="/signup" className="text-white hover:text-blue-500 transition-colors font-bold ml-1 underline underline-offset-4 decoration-blue-500/30">Generate ID</Link>
