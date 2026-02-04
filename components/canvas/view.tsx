@@ -57,7 +57,6 @@ function CarModel({ url, isExploded, customScale }: { url: string; isExploded?: 
   );
 }
 
-// 🌍 2. ഇതാണ് ലബിൽ നീ വിളിക്കുന്ന മെയിൻ കോമ്പോണന്റ്
 export default function View({ modelUrl, isExploded, scale = 1 }: ViewProps) {
   return (
     <div className="h-full w-full outline-none bg-transparent">
@@ -72,7 +71,6 @@ export default function View({ modelUrl, isExploded, scale = 1 }: ViewProps) {
                <CarModel url={modelUrl} isExploded={isExploded} customScale={scale} />
             </Center>
 
-            {/* പ്ലാറ്റ്‌ഫോം */}
             <group position={[0, -0.6, 0]}>
               <mesh rotation={[-Math.PI / 2, 0, 0]}>
                 <circleGeometry args={[4, 64]} />
