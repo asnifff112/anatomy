@@ -37,7 +37,6 @@ const handleEnter = () => {
             >
               Initializing Laboratory...
             </motion.div>
-            {/* ഒരു ലളിതമായ ലോഡിംഗ് ബാർ */}
             <motion.div 
               initial={{ width: 0 }}
               animate={{ width: "200px" }}
@@ -48,15 +47,12 @@ const handleEnter = () => {
         )}
       </AnimatePresence>
 
-      {/* LAYER 1: 3D Background */}
       <div className="absolute inset-0 z-0 opacity-70 pointer-events-none flex items-center justify-center">
         <View modelUrl="/car.glb" />
       </div>
 
-      {/* LAYER 2: Overlays */}
       <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60 z-[1] pointer-events-none" />
 
-      {/* LAYER 3: Main Content */}
       <motion.div 
         animate={isExiting ? { opacity: 0, scale: 0.9, filter: "blur(10px)" } : { opacity: 1 }}
         transition={{ duration: 0.8 }}
