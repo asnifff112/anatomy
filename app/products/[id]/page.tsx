@@ -115,7 +115,6 @@ export default function ProductDetailsPage() {
         <div className="relative z-10 w-full h-[75vh] mt-4">
           <CarView modelUrl={car.modelUrl} selectedColor={selectedColor} />
           
-          {/* Right Side Control Panel */}
           <div className="absolute right-10 top-1/2 -translate-y-1/2 flex flex-col gap-6 z-20">
              <div className="flex flex-col items-end">
                 <p className="text-[8px] font-black text-blue-500 tracking-[0.3em] mb-2 uppercase">Protocol_09</p>
@@ -138,7 +137,6 @@ export default function ProductDetailsPage() {
              </div>
           </div>
 
-          {/* Paint Selector UI */}
           <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3">
             <p className="text-[8px] uppercase tracking-[0.4em] font-bold text-zinc-500">Body Finish</p>
             <div className="bg-zinc-900/50 backdrop-blur-3xl border border-white/10 p-3 px-6 rounded-2xl flex gap-5">
@@ -156,7 +154,6 @@ export default function ProductDetailsPage() {
           </div>
         </div>
 
-        {/* 📊 Specs Grid */}
         <div className="relative z-10 grid grid-cols-2 gap-8 md:gap-16 border-t border-white/5 pt-10 w-full max-w-3xl px-6 mt-4">
             <div className="flex flex-col items-center border-r border-white/5">
               <p className="text-zinc-500 text-[10px] uppercase font-bold tracking-widest mb-2 italic">Powertrain</p>
