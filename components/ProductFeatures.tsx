@@ -51,7 +51,6 @@ export default function ProductFeatures({ features }: { features: Feature[] }) {
               index % 2 !== 0 ? "md:flex-row-reverse" : ""
             }`}
           >
-            {/* 🎥 Video Display */}
             <div className="w-full md:w-3/5 relative group">
               <div className="absolute -inset-1 bg-blue-600/20 rounded-2xl blur-xl group-hover:opacity-100 transition duration-700 opacity-0"></div>
               <div className="relative aspect-video rounded-xl overflow-hidden border border-white/10 shadow-2xl">
@@ -63,7 +62,6 @@ export default function ProductFeatures({ features }: { features: Feature[] }) {
               </div>
             </div>
 
-            {/* 📝 Content */}
             <div className="w-full md:w-2/5 space-y-6">
               <span className="text-blue-500 font-mono text-sm tracking-widest uppercase">Component_{feature.id}</span>
               <h3 className="text-3xl font-bold uppercase italic tracking-tight italic">
