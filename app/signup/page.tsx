@@ -21,7 +21,6 @@ export default function SignupPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // GSAP Animation
   useEffect(() => {
     const tl = gsap.timeline();
     tl.fromTo(leftPanelRef.current, { x: -50, opacity: 0 }, { x: 0, opacity: 1, duration: 1, ease: "power4.out" })
@@ -64,12 +63,10 @@ export default function SignupPage() {
 
   return (
     <main className="min-h-screen bg-black text-white flex items-center justify-center p-4 pt-28">
-      {/* Glow Effect */}
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600/10 blur-[120px] rounded-full pointer-events-none" />
 
       <div className="w-full max-w-5xl grid md:grid-cols-2 bg-zinc-950 border border-white/10 rounded-[40px] overflow-hidden shadow-2xl relative z-10">
         
-        {/* Left Side: Brand Identity */}
         <div ref={leftPanelRef} className="p-12 bg-gradient-to-br from-blue-900/30 to-black flex flex-col justify-between border-r border-white/5">
           <div>
             <div className="w-14 h-14 bg-white rounded-2xl rotate-45 flex items-center justify-center mb-12 shadow-[0_0_30px_rgba(255,255,255,0.2)]">
@@ -88,7 +85,6 @@ export default function SignupPage() {
           </div>
         </div>
 
-        {/* Right Side: Signup Form */}
         <div className="p-10 md:p-16 bg-zinc-950/50 backdrop-blur-md">
           <form ref={formRef} onSubmit={handleSignup} className="space-y-5">
             <h2 className="text-xl font-bold uppercase italic tracking-widest mb-8 animate-input">Pilot Registration</h2>
