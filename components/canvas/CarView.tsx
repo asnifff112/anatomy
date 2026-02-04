@@ -29,14 +29,14 @@ function Model({ url, color }: { url: string; color: string }) {
         } 
         else if (isWheel) {
           const wheelMaterial = new THREE.MeshStandardMaterial({
-            color: name.includes("tire") ? new THREE.Color("#111111") : new THREE.Color("#888888"), // Tyre black, Rim silver
+            color: name.includes("tire") ? new THREE.Color("#111111") : new THREE.Color("#888888"),
             metalness: 0.9,
             roughness: 0.2,
           });
           mesh.material = wheelMaterial;
         } 
         else if (!isInterior && !name.includes("light")) {
-          // 🎨 ONLY EXTERIOR BODY: Ividem mathram selected color varu
+          
           if (mesh.material) {
             const newMaterial = (mesh.material as THREE.MeshStandardMaterial).clone();
             newMaterial.color.set(new THREE.Color(color));
