@@ -46,13 +46,11 @@ export default function LoginPage() {
   return (
     <main ref={containerRef} className="min-h-screen bg-black text-white flex items-center justify-center p-6 pt-32 relative overflow-hidden">
       
-      {/* Background Glows */}
       <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-600/10 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-red-600/10 rounded-full blur-[120px] pointer-events-none" />
 
       <div ref={formRef} className="w-full max-w-[450px] bg-zinc-950 border border-white/10 p-10 rounded-[40px] shadow-2xl relative z-10 backdrop-blur-xl">
         
-        {/* Header */}
         <div className="mb-10 text-center">
           <div className="inline-block px-3 py-1 border border-blue-500/30 rounded-full mb-4">
              <span className="text-[10px] font-mono text-blue-500 uppercase tracking-[0.3em]">Identity Check</span>
@@ -61,7 +59,6 @@ export default function LoginPage() {
         </div>
 
         <form onSubmit={handleLogin} className="space-y-6">
-          {/* Email Input */}
           <div className="group">
             <label className="text-[10px] uppercase font-bold text-zinc-500 tracking-widest ml-1 mb-2 block group-focus-within:text-blue-500 transition-colors">Access ID</label>
             <input
@@ -73,8 +70,7 @@ export default function LoginPage() {
             />
           </div>
 
-          {/* Password Input */}
-          <div className="group">
+\          <div className="group">
             <label className="text-[10px] uppercase font-bold text-zinc-500 tracking-widest ml-1 mb-2 block group-focus-within:text-blue-500 transition-colors">Security Key</label>
             <input
               type="password"
@@ -85,7 +81,6 @@ export default function LoginPage() {
             />
           </div>
 
-          {/* Error Message */}
           {error && (
             <div className="bg-red-500/10 border border-red-500/50 p-3 rounded-xl">
                <p className="text-red-500 text-[11px] font-bold uppercase text-center tracking-tighter">{error}</p>
