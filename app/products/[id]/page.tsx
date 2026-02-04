@@ -30,7 +30,6 @@ export default function ProductDetailsPage() {
   const titleRef = useRef(null);
   const btnRef = useRef(null);
 
-  // 1. Fetch Car Details
   useEffect(() => {
     fetch(`${DB_URL}/${id}`)
       .then((res) => res.json())
@@ -38,7 +37,6 @@ export default function ProductDetailsPage() {
       .catch((err) => console.error(err));
   }, [id]);
 
-  // 2. Fetch User Wishlist State on Load
   useEffect(() => {
     const checkWishlistStatus = async () => {
       if (user?.id) {
@@ -46,7 +44,6 @@ export default function ProductDetailsPage() {
           const res = await fetch(`${USER_URL}/${user.id}`);
           const data = await res.json();
           setUserData(data);
-          // Check if current car id is in user's wishlist
           if (data.wishlist?.includes(id)) {
             setIsSaved(true);
           }
@@ -58,7 +55,6 @@ export default function ProductDetailsPage() {
     checkWishlistStatus();
   }, [id, user]);
 
-  // 3. Toggle Wishlist (Add/Remove)
   const toggleHangar = async () => {
     if (!user?.id) {
       alert("Please login to access the Hangar!");
