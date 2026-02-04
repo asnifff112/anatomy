@@ -13,13 +13,11 @@ function Model({ url, color }: { url: string; color: string }) {
         const mesh = child as THREE.Mesh;
         const name = mesh.name.toLowerCase();
 
-        // 1. Detection Logic
         const isGlass = name.includes("glass") || name.includes("window") || name.includes("windshield");
         const isWheel = name.includes("wheel") || name.includes("tire") || name.includes("rim") || name.includes("alloy");
         const isInterior = name.includes("interior") || name.includes("seat") || name.includes("dash");
 
         if (isGlass) {
-          // Glass fixed with dark tint
           mesh.material = new THREE.MeshPhysicalMaterial({
             color: new THREE.Color("#080808"),
             metalness: 0.9,
@@ -30,7 +28,6 @@ function Model({ url, color }: { url: string; color: string }) {
           });
         } 
         else if (isWheel) {
-          // 🏎️ WHEEL FIX: Eppozhum metallic silver/black aayi nilkan
           const wheelMaterial = new THREE.MeshStandardMaterial({
             color: name.includes("tire") ? new THREE.Color("#111111") : new THREE.Color("#888888"), // Tyre black, Rim silver
             metalness: 0.9,
