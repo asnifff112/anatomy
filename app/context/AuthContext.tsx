@@ -34,7 +34,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setLoading(false);
   }, []);
 
-  // ✅ LOGIN (ONLY CHECK)
   const login = async (email: string, password: string) => {
     try {
       const res = await fetch(
@@ -53,7 +52,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  // ✅ LOGOUT
   const logout = () => {
     setUser(null);
     localStorage.removeItem("velocity_user");
