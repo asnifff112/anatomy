@@ -66,7 +66,6 @@ export default function ProductDetailsPage() {
     gsap.to(btnRef.current, { scale: 0.9, duration: 0.1, yoyo: true, repeat: 1 });
 
     try {
-      // Fetch latest user data to ensure sync
       const userRes = await fetch(`${USER_URL}/${user.id}`);
       const currentData = await userRes.json();
       
@@ -91,7 +90,6 @@ export default function ProductDetailsPage() {
         setIsSaved(!isInWishlist);
         setUserData({ ...currentData, wishlist: updatedWishlist });
         
-        // Success Animation
         gsap.to(btnRef.current, { 
           backgroundColor: !isInWishlist ? "#2563eb" : "transparent", 
           duration: 0.5 
@@ -110,12 +108,10 @@ export default function ProductDetailsPage() {
     <main className="bg-black text-white min-h-screen">
       <section className="relative h-screen flex flex-col items-center justify-start pt-12 overflow-hidden">
         
-        {/* BG Title */}
         <div ref={titleRef} className="absolute top-10 w-full text-center pointer-events-none z-0 opacity-10">
           <h1 className="text-[15vw] font-black uppercase italic leading-none tracking-tighter">{car.name}</h1>
         </div>
 
-        {/* 🏎️ Car Display Area */}
         <div className="relative z-10 w-full h-[75vh] mt-4">
           <CarView modelUrl={car.modelUrl} selectedColor={selectedColor} />
           
