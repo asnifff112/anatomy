@@ -73,7 +73,6 @@ const handleEnter = () => {
           </div>
         </motion.div>
 
-        {/* ബട്ടൺ ക്ലിക്ക് ചെയ്യുമ്പോൾ handleEnter വർക്ക് ആകും */}
         <motion.div
            initial={{ opacity: 0 }}
            animate={{ opacity: 1 }}
@@ -85,7 +84,6 @@ const handleEnter = () => {
         </motion.div>
       </motion.div>
 
-      {/* Lab UI Elements */}
       <div className="absolute bottom-10 left-10 z-10 opacity-30 font-mono text-[8px] tracking-[0.2em] uppercase">
         V12 Valor Chassis // Active Mode
       </div>
