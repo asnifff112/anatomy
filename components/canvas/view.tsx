@@ -14,7 +14,6 @@ interface ViewProps {
   scale?: number;
 }
 
-// 🏎️ 1. ഇത് കാർ ലോഡ് ചെയ്യാനുള്ള ഫങ്ക്ഷൻ
 function CarModel({ url, isExploded, customScale }: { url: string; isExploded?: boolean; customScale: number }) {
   const group = useRef<THREE.Group>(null);
   const { scene, animations } = useGLTF(url);
@@ -22,7 +21,6 @@ function CarModel({ url, isExploded, customScale }: { url: string; isExploded?: 
   const scroll = useScroll();
   const tl = useRef<any>(null);
 
-  // 🔥 ഈ ലോജിക് ആണ് BMW-വിനെയും Porsche-യെയും ഒരേ സൈസ് ആക്കുന്നത്
   useLayoutEffect(() => {
     if (scene) {
       const box = new THREE.Box3().setFromObject(scene);
@@ -34,7 +32,6 @@ function CarModel({ url, isExploded, customScale }: { url: string; isExploded?: 
       box.getSize(size);
       const maxDim = Math.max(size.x, size.y, size.z);
       
-      // കാർ എത്ര വലുതായാലും ചെറുതായാലും അതിനെ 3.5 എന്ന സൈസിലേക്ക് മാറ്റും
       const scaleFactor = 3.5 / maxDim; 
       scene.scale.setScalar(scaleFactor);
     }
