@@ -64,13 +64,12 @@ export default function TheLab() {
                   </span>
                 </div>
 
-                {/* 🏎️ 3D View - Normalized and Centered */}
                 <div className="absolute inset-0 z-0 flex items-center justify-center pointer-events-none group-hover:pointer-events-auto">
                    <div className="w-full h-full">
                       <View 
                         modelUrl={car.modelUrl} 
                         isExploded={false} 
-                        scale={1.2} // Normalized ആയതുകൊണ്ട് എല്ലാ കാറും 1.2 സൈസിൽ വരും
+                        scale={1.2}
                       />
                    </div>
                 </div>
