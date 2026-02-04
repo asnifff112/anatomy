@@ -6,7 +6,6 @@ import View from "@/components/canvas/view";
 
 const DB_URL = "http://localhost:5000/cars";
 
-// Interface for TypeScript to understand car object
 interface Car {
   id: string;
   name: string;
@@ -14,7 +13,7 @@ interface Car {
 }
 
 export default function TheLab() {
-  const [cars, setCars] = useState<Car[]>([]); // Typed as Car array
+  const [cars, setCars] = useState<Car[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -53,8 +52,7 @@ export default function TheLab() {
                 whileHover={{ borderColor: 'rgba(59,130,246,0.5)' }}
                 className="relative p-8 h-[450px] border border-white/5 rounded-[2.5rem] overflow-hidden flex flex-col justify-between bg-zinc-950 group"
               >
-                {/* ID Tag */}
-                <div className="flex justify-between items-start z-10">
+\                <div className="flex justify-between items-start z-10">
                   <span className="text-[10px] tracking-widest uppercase py-1.5 px-4 bg-white/5 border border-white/10 rounded-full font-mono text-gray-400">
                     {car.id}
                   </span>
@@ -74,8 +72,7 @@ export default function TheLab() {
                    </div>
                 </div>
 
-                {/* Title and Button */}
-                <div className="z-10 bg-gradient-to-t from-zinc-950 via-zinc-950/60 to-transparent pt-20">
+\                <div className="z-10 bg-gradient-to-t from-zinc-950 via-zinc-950/60 to-transparent pt-20">
                   <h3 className="text-4xl font-black tracking-tighter uppercase italic leading-none mb-2 text-white">
                     {car.name}
                   </h3>
