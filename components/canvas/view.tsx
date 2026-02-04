@@ -12,14 +12,15 @@ interface ViewProps {
   modelUrl: string;
   isExploded?: boolean;
   scale?: number;
+  isLab?: boolean;
 }
 
-function CarModel({ url, isExploded, customScale }: { url: string; isExploded?: boolean; customScale: number }) {
+function CarModel({ url, isExploded, customScale, isLab }: { url: string; isExploded?: boolean; customScale: number; isLab: boolean }) {
   const group = useRef<THREE.Group>(null);
   const { scene, animations } = useGLTF(url);
   const { actions } = useAnimations(animations, group);
   const scroll = useScroll();
-  const tl = useRef<any>(null);
+  const tl = useRef<gsap.core.Timeline | null>(null);
 
   useLayoutEffect(() => {
     if (scene) {
@@ -31,67 +32,105 @@ function CarModel({ url, isExploded, customScale }: { url: string; isExploded?: 
       const size = new THREE.Vector3();
       box.getSize(size);
       const maxDim = Math.max(size.x, size.y, size.z);
-      
       const scaleFactor = 3.5 / maxDim; 
       scene.scale.setScalar(scaleFactor);
     }
   }, [scene, url]);
 
-  useEffect(() => {
-    if (actions) {
-      Object.values(actions).forEach((action) => {
-        isExploded ? action?.play().fadeIn(1) : action?.fadeOut(1).stop();
-      });
-    }
-  }, [actions, isExploded]);
+  useLayoutEffect(() => {
+    if (!scene || isLab) return; 
+    if (tl.current) tl.current.kill();
+    tl.current = gsap.timeline({ paused: true });
 
+    scene.traverse((child) => {
+      if ((child as THREE.Mesh).isMesh) {
+        const name = child.name.toLowerCase();
+
+        if (name.includes("door")) {
+          const isLeft = child.position.x < 0;
+          tl.current!.to(child.rotation, { 
+            y: isLeft ? Math.PI / 2 : -Math.PI / 2, 
+            duration: 1 
+          }, 0);
+        }
+
+        if (name.includes("bonnet") || name.includes("hood")) {
+          tl.current!.to(child.rotation, { x: -Math.PI / 2.5, duration: 1 }, 0);
+        }
+
+        if (name.includes("boot") || name.includes("trunk") || name.includes("rear")) {
+          tl.current!.to(child.rotation, { x: Math.PI / 2.5, duration: 1 }, 0);
+        }
+      }
+    });
+  }, [scene, isLab]);
+
+ 
   return (
-    <Float speed={isExploded ? 0 : 0.8} rotationIntensity={0.1} floatIntensity={0.1}>
+    <Float speed={isLab ? 1 : 1.5} rotationIntensity={0.05} floatIntensity={0.05}>
       <primitive 
         ref={group}
         object={scene} 
         scale={customScale} 
-        rotation={[0, -Math.PI / 6, 0]} 
+        rotation={[0, -Math.PI / 4, 0]} 
       />
     </Float>
   );
 }
 
-export default function View({ modelUrl, isExploded, scale = 1 }: ViewProps) {
+export default function View({ modelUrl, isExploded, scale = 1, isLab = false }: ViewProps) {
   return (
     <div className="h-full w-full outline-none bg-transparent">
-      <Canvas shadows dpr={[1, 1.5]} camera={{ position: [0, 1, 5], fov: 35 }}>
+      <Canvas 
+        shadows 
+        dpr={[1, 2]} 
+        camera={{ position: [0, 1.5, 5], fov: 35 }}
+        gl={{ antialias: true, toneMapping: THREE.ReinhardToneMapping }}
+      >
         <Suspense fallback={null}>
-          <ScrollControls pages={isExploded ? 3 : 0} damping={0.2}>
+          
             
-            <ambientLight intensity={0.7} />
-            <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1} />
+            <ambientLight intensity={isLab ? 0.4 : 0.8} />
+            
+            {isLab && (
+              <>
+                <spotLight position={[5, 10, 5]} angle={0.25} penumbra={1} intensity={2} color="#3b82f6" castShadow />
+                <rectAreaLight width={10} height={10} intensity={1} color="#3b82f6" position={[0, 5, -5]} />
+              </>
+            )}
 
             <Center top>
-               <CarModel url={modelUrl} isExploded={isExploded} customScale={scale} />
+               <CarModel url={modelUrl} isExploded={isExploded} customScale={scale} isLab={isLab} />
             </Center>
 
-            <group position={[0, -0.6, 0]}>
-              <mesh rotation={[-Math.PI / 2, 0, 0]}>
-                <circleGeometry args={[4, 64]} />
-                <MeshReflectorMaterial
-                  blur={[300, 100]}
-                  resolution={1024}
-                  mixBlur={1}
-                  mixStrength={50}
-                  roughness={1}
-                  depthScale={1.2}
-                  color="#151515" 
-                  metalness={0.6}
-                />
-              </mesh>
-              <ContactShadows opacity={0.4} scale={10} blur={2} far={1.5} color="#000000" />
-            </group>
+            {isLab ? (
+              <group position={[0, -0.6, 0]}>
+                <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.02, 0]}>
+                  <ringGeometry args={[3.8, 4, 80]} />
+                  <meshStandardMaterial emissive="#3b82f6" emissiveIntensity={15} toneMapped={false} />
+                </mesh>
+                <mesh rotation={[-Math.PI / 2, 0, 0]}>
+                  <circleGeometry args={[4.5, 64]} />
+                  <MeshReflectorMaterial 
+                    blur={[300, 100]} 
+                    resolution={1024} 
+                    mixBlur={1} 
+                    mixStrength={60} 
+                    roughness={1} 
+                    depthScale={1.2} 
+                    color="#080808" 
+                    metalness={0.8} 
+                  />
+                </mesh>
+              </group>
+            ) : (
+              <ContactShadows position={[0, -0.6, 0]} opacity={0.4} scale={10} blur={2} far={1.5} color="#000000" />
+            )}
 
-          </ScrollControls>
+          
           <Environment preset="city" />
         </Suspense>
-        <OrbitControls enableZoom={false} enablePan={false} makeDefault />
+        <OrbitControls enableZoom={isLab} enablePan={false} makeDefault />
       </Canvas>
     </div>
   );
