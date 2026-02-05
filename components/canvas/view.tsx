@@ -6,7 +6,7 @@ import {
 } from "@react-three/drei";
 import { Suspense, useRef, useLayoutEffect } from "react";
 import * as THREE from "three";
-import gsap from "gsap";
+
 
 interface ViewProps {
   modelUrl: string;
