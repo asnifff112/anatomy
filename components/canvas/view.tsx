@@ -2,7 +2,7 @@
 import { Canvas, useFrame } from "@react-three/fiber";
 import { 
   useGLTF, Environment, Float, useAnimations, 
-  OrbitControls, ScrollControls, useScroll, MeshReflectorMaterial, ContactShadows, Center
+  OrbitControls,  MeshReflectorMaterial, ContactShadows, Center
 } from "@react-three/drei";
 import { Suspense, useRef, useLayoutEffect } from "react";
 import * as THREE from "three";
