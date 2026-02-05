@@ -4,7 +4,7 @@ import {
   useGLTF, Environment, Float, useAnimations, 
   OrbitControls, ScrollControls, useScroll, MeshReflectorMaterial, ContactShadows, Center
 } from "@react-three/drei";
-import { Suspense, useRef, useEffect, useLayoutEffect } from "react";
+import { Suspense, useRef, useLayoutEffect } from "react";
 import * as THREE from "three";
 import gsap from "gsap";
 
@@ -19,7 +19,7 @@ function CarModel({ url, isExploded, customScale, isLab }: { url: string; isExpl
   const group = useRef<THREE.Group>(null);
   const { scene, animations } = useGLTF(url);
   const { actions } = useAnimations(animations, group);
-  const scroll = useScroll();
+ 
   const tl = useRef<gsap.core.Timeline | null>(null);
 
   useLayoutEffect(() => {
