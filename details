@@ -1,0 +1,44 @@
+const toggleHangar = async () => {
+    // 1. ലോഗിൻ ചെയ്തിട്ടില്ലെങ്കിൽ ലോഗിൻ പേജിലേക്ക് വിടും
+    if (!user?.id) {
+      alert("Please login to access the Hangar!");
+      router.push("/login");
+      return;
+    }
+    
+    setIsSaving(true); // ലോഡിങ് തുടങ്ങുന്നു
+    // 2. ബട്ടൺ ചെറുതായി ഒന്ന് ചുരുങ്ങി വികസിക്കുന്ന അനിമേഷൻ (GSAP)
+    gsap.to(btnRef.current, { scale: 0.9, duration: 0.1, yoyo: true, repeat: 1 });
+
+    try {
+      // 3. നിലവിലെ യൂസർ ഡാറ്റ എടുക്കുന്നു
+      const userRes = await fetch(`${USER_URL}/${user.id}`);
+      const currentData = await userRes.json();
+      
+      let updatedWishlist = currentData.wishlist || [];
+      const isInWishlist = updatedWishlist.includes(id);
+
+      // 4. കാർ ഇതിനകം ഉണ്ടെങ്കിൽ ഒഴിവാക്കുക, ഇല്ലെങ്കിൽ ചേർക്കുക
+      if (isInWishlist) {
+        updatedWishlist = updatedWishlist.filter((itemId: string) => itemId !== id);
+      } else {
+        updatedWishlist = [...updatedWishlist, id];
+      }
+
+      // 5. പുതിയ ലിസ്റ്റ് ഡാറ്റാബേസിലേക്ക് അപ്‌ഡേറ്റ് ചെയ്യുന്നു (PATCH request)
+      const patchRes = await fetch(`${USER_URL}/${user.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ wishlist: updatedWishlist }),
+      });
+
+      if (patchRes.ok) {
+        setIsSaved(!isInWishlist); // സ്റ്റാറ്റസ് മാറ്റുന്നു
+        // ബട്ടന്റെ നിറം മാറുന്ന അനിമേഷൻ
+        gsap.to(btnRef.current, { 
+          backgroundColor: !isInWishlist ? "#2563eb" : "transparent", 
+          duration: 0.5 
+        });
+      }
+    } ...
+  };

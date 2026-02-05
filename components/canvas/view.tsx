@@ -37,34 +37,7 @@ function CarModel({ url, isExploded, customScale, isLab }: { url: string; isExpl
     }
   }, [scene, url]);
 
-  useLayoutEffect(() => {
-    if (!scene || isLab) return; 
-    if (tl.current) tl.current.kill();
-    tl.current = gsap.timeline({ paused: true });
-
-    scene.traverse((child) => {
-      if ((child as THREE.Mesh).isMesh) {
-        const name = child.name.toLowerCase();
-
-        if (name.includes("door")) {
-          const isLeft = child.position.x < 0;
-          tl.current!.to(child.rotation, { 
-            y: isLeft ? Math.PI / 2 : -Math.PI / 2, 
-            duration: 1 
-          }, 0);
-        }
-
-        if (name.includes("bonnet") || name.includes("hood")) {
-          tl.current!.to(child.rotation, { x: -Math.PI / 2.5, duration: 1 }, 0);
-        }
-
-        if (name.includes("boot") || name.includes("trunk") || name.includes("rear")) {
-          tl.current!.to(child.rotation, { x: Math.PI / 2.5, duration: 1 }, 0);
-        }
-      }
-    });
-  }, [scene, isLab]);
-
+  
  
   return (
     <Float speed={isLab ? 1 : 1.5} rotationIntensity={0.05} floatIntensity={0.05}>
