@@ -6,7 +6,7 @@ export default function UserDetails() {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:3001/users").then(res => res.json()).then(setUsers);
+    fetch("http://localhost:5000/users").then(res => res.json()).then(setUsers);
   }, []);
 
   return (
