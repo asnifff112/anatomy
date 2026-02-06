@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/app/context/AuthContext";
 import { gsap } from "gsap";
 import Link from "next/link";
+import { toast } from "react-hot-toast";
 
 export default function LoginPage() {
   const { login } = useAuth();
@@ -25,27 +26,24 @@ export default function LoginPage() {
   }, []);
 
   const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError("");
-    setLoading(true);
+  e.preventDefault();
+  setLoading(true);
 
-    // AuthContext-ലെ ലോഗിൻ ഫങ്ക്ഷൻ വിളിക്കുന്നു
-    const success = await login(email, password);
+  const success = await login(email, password);
 
-    if (success) {
-      // അഡ്മിൻ ആണോ എന്ന് ചെക്ക് ചെയ്യുന്നു
-      if (email === "admin@gmail.com") {
-        router.push("/admin/dashboard");
-      } else {
-        router.push("/"); // സാധാരണ യൂസർ ആണെങ്കിൽ ഹോം പേജിലേക്ക്
-      }
+  if (success) {
+    toast.success("Welcome back, Pilot!"); 
+    if (email === "admin@gmail.com") {
+      router.push("/admin/dashboard");
     } else {
-      setError("Invalid email or password");
-      // തെറ്റായ പാസ്‌വേഡ് അടിച്ചാൽ Shake ആനിമേഷൻ
-      gsap.to(formRef.current, { x: 10, duration: 0.1, repeat: 3, yoyo: true });
+      router.push("/");
     }
-    setLoading(false);
-  };
+  } else {
+    toast.error("Access Denied: Invalid Credentials"); 
+    gsap.to(formRef.current, { x: 10, duration: 0.1, repeat: 3, yoyo: true });
+  }
+  setLoading(false);
+};
 
   return (
     <main ref={containerRef} className="min-h-screen bg-black text-white flex items-center justify-center p-6 pt-32 relative overflow-hidden">
