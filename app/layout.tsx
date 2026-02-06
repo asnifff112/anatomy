@@ -3,13 +3,13 @@
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { AuthProvider } from "@/app/context/AuthContext";
-import { usePathname } from "next/navigation"; // പാത്ത് ചെക്ക് ചെയ്യാൻ ഇത് വേണം
+import { usePathname } from "next/navigation"; 
 import "./globals.css";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
-  // URL "/admin" എന്ന് തുടങ്ങുന്നുണ്ടോ എന്ന് നോക്കുന്നു
+  
   const isAdminPage = pathname.startsWith("/admin");
 
   return (
