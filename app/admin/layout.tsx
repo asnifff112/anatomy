@@ -37,7 +37,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   return (
     <div className="flex min-h-screen bg-[#0a0a0c] text-white">
-      {/* --- SIDEBAR --- */}
       <aside 
         ref={sidebarRef}
         className="w-64 border-r border-white/5 bg-[#0d0d0f] flex flex-col sticky top-0 h-screen z-20"
@@ -78,12 +77,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </div>
       </aside>
 
-      {/* --- MAIN CONTENT --- */}
       <main 
         ref={contentRef}
         className="flex-1 overflow-y-auto"
       >
-        {/* Top Header */}
         <header className="h-16 border-b border-white/5 bg-[#0a0a0c]/50 backdrop-blur-md flex items-center justify-end px-8 sticky top-0 z-10">
           <div className="flex items-center gap-3">
             <div className="text-right">
@@ -96,7 +93,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </div>
         </header>
 
-        {/* Page Content */}
         <div className="p-4">
           {children}
         </div>
