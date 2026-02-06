@@ -16,7 +16,7 @@ export default function LoginPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // GSAP Entry Animation
+  
   useEffect(() => {
     const tl = gsap.timeline();
     tl.fromTo(containerRef.current, { opacity: 0 }, { opacity: 1, duration: 1 })
