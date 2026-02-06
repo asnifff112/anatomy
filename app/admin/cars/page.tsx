@@ -20,12 +20,12 @@ export default function CarDetails() {
       body: JSON.stringify(newCar)
     });
     setName("");
-    fetchCars(); // Refresh list
+    fetchCars(); 
   };
 
   const handleDelete = async (id: any) => {
     await fetch(`http://localhost:5000/cars/${id}`, { method: "DELETE" });
-    fetchCars(); // Refresh list
+    fetchCars(); 
   };
 
   return (
