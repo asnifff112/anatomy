@@ -1,51 +1,56 @@
 "use client";
-import { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { Plus, Trash2, Edit2, Box } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Plus, Trash2, Box } from "lucide-react";
 
 export default function CarDetails() {
-  const root = useRef(null);
+  const [cars, setCars] = useState([]);
+  const [name, setName] = useState("");
 
-  useEffect(() => {
-    let ctx = gsap.context(() => {
-      gsap.from(".car-row", { opacity: 0, x: -20, stagger: 0.1, duration: 0.8 });
-    }, root);
-    return () => ctx.revert();
-  }, []);
+  const fetchCars = () => {
+    fetch("http://localhost:5000/cars").then(res => res.json()).then(setCars);
+  };
+
+  useEffect(() => { fetchCars(); }, []);
+
+  const handleAdd = async () => {
+    const newCar = { name, url: `/models/${name.toLowerCase()}.glb`, status: "Live" };
+    await fetch("http://localhost:5000/cars", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newCar)
+    });
+    setName("");
+    fetchCars(); // Refresh list
+  };
+
+  const handleDelete = async (id: any) => {
+    await fetch(`http://localhost:5000/cars/${id}`, { method: "DELETE" });
+    fetchCars(); // Refresh list
+  };
 
   return (
-    <div ref={root} className="p-8 space-y-8 bg-[#0a0a0c] min-h-screen text-white">
-      <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-black uppercase tracking-tighter text-blue-500">Car Inventory</h1>
-        <button className="bg-blue-600 hover:bg-blue-500 px-6 py-2 rounded-full flex items-center gap-2 text-sm font-bold transition-all active:scale-95">
-          <Plus size={18}/> Add New Model
+    <div className="p-8 space-y-8 bg-[#0a0a0c] min-h-screen text-white">
+      <div className="flex gap-4 bg-[#141417] p-6 rounded-2xl border border-white/5">
+        <input 
+          className="flex-1 bg-[#1c1c21] p-3 rounded-xl border border-white/5 outline-none focus:border-blue-500" 
+          placeholder="New Car Name..." 
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+        <button onClick={handleAdd} className="bg-blue-600 px-6 py-3 rounded-xl font-bold flex items-center gap-2">
+          <Plus size={18}/> Add Car
         </button>
       </div>
 
       <div className="bg-[#141417] rounded-2xl border border-white/5 overflow-hidden">
-        <table className="w-full text-left">
-          <thead className="bg-white/5 text-[10px] uppercase font-bold text-gray-500 tracking-widest">
-            <tr>
-              <th className="p-5">Model Name</th>
-              <th className="p-5">File Path</th>
-              <th className="p-5 text-right">Action</th>
-            </tr>
-          </thead>
-          <tbody className="text-sm">
-            {["Porsche 911 GT3", "BMW M4 Competition", "Tesla Model S"].map((car, i) => (
-              <tr key={i} className="car-row border-t border-white/5 hover:bg-white/5 transition-colors group">
-                <td className="p-5 font-bold flex items-center gap-3">
-                  <Box size={16} className="text-blue-500"/> {car}
-                </td>
-                <td className="p-5 text-gray-500 font-mono text-xs">/models/{car.toLowerCase().replace(/ /g, "_")}.glb</td>
-                <td className="p-5 text-right flex justify-end gap-4">
-                  <button className="p-2 text-blue-400 hover:bg-blue-400/10 rounded-lg"><Edit2 size={16}/></button>
-                  <button className="p-2 text-red-500 hover:bg-red-500/10 rounded-lg"><Trash2 size={16}/></button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        {cars.map((car: any) => (
+          <div key={car.id} className="p-5 border-t border-white/5 flex justify-between items-center group hover:bg-white/5">
+            <div className="flex items-center gap-3"><Box size={16} className="text-blue-500"/> {car.name}</div>
+            <button onClick={() => handleDelete(car.id)} className="text-red-500 p-2 opacity-0 group-hover:opacity-100 transition-opacity">
+              <Trash2 size={18}/>
+            </button>
+          </div>
+        ))}
       </div>
     </div>
   );
