@@ -6,7 +6,7 @@ export default function AdminDashboard() {
   const [stats, setStats] = useState({ totalUsers: 0, totalCars: 0, wishlists: 0 });
 
   useEffect(() => {
-    fetch("http://localhost:3001/stats")
+    fetch("http://localhost:5000/stats")
       .then(res => res.json())
       .then(data => setStats(data));
   }, []);
