@@ -117,9 +117,7 @@
       "email": "asif@gmail.com",
       "password": "123456",
       "callsign": "loo",
-      "wishlist": [
-        "m4-competition"
-      ]
+      "wishlist": []
     }
   ]
 }

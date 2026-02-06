@@ -5,6 +5,7 @@ import { gsap } from "gsap";
 import { useAuth } from "@/app/context/AuthContext";
 import ProductFeatures from "@/components/ProductFeatures";
 import CarView from "@/components/canvas/carview";
+import { toast } from "react-hot-toast";
 
 const DB_URL = "http://localhost:5000/cars";
 const USER_URL = "http://localhost:5000/users";
@@ -29,6 +30,27 @@ export default function ProductDetailsPage() {
 
   const titleRef = useRef(null);
   const btnRef = useRef(null);
+
+  // ടോസ്റ്റ് നോട്ടിഫിക്കേഷൻ സ്റ്റൈൽ - കാർ എക്സ്പീരിയൻസിന് അനുയോജ്യമായത്
+  const showToast = (message: string, type: "success" | "error") => {
+    toast(message, {
+      duration: 3000,
+      position: "top-right",
+      style: {
+        background: "#0a0a0a",
+        color: "#fff",
+        border: "1px solid rgba(37, 99, 235, 0.5)",
+        borderRadius: "0px", // കാർ ഡിസൈനിലെ ഷാർപ്പ് ലുക്കിന്
+        padding: "16px",
+        fontSize: "10px",
+        fontWeight: "bold",
+        textTransform: "uppercase",
+        letterSpacing: "0.2em",
+        fontFamily: "monospace",
+      },
+      icon: type === "success" ? "🔵" : "⚠️",
+    });
+  };
 
   useEffect(() => {
     fetch(`${DB_URL}/${id}`)
@@ -57,7 +79,7 @@ export default function ProductDetailsPage() {
 
   const toggleHangar = async () => {
     if (!user?.id) {
-      alert("Please login to access the Hangar!");
+      showToast("Access Denied: Please login first", "error");
       router.push("/login");
       return;
     }
@@ -73,10 +95,8 @@ export default function ProductDetailsPage() {
       const isInWishlist = updatedWishlist.includes(id);
 
       if (isInWishlist) {
-       
         updatedWishlist = updatedWishlist.filter((itemId: string) => itemId !== id);
       } else {
-        
         updatedWishlist = [...updatedWishlist, id];
       }
 
@@ -90,12 +110,20 @@ export default function ProductDetailsPage() {
         setIsSaved(!isInWishlist);
         setUserData({ ...currentData, wishlist: updatedWishlist });
         
+        // ടോസ്റ്റ് മെസ്സേജ് കാണിക്കുന്നു
+        if (!isInWishlist) {
+          showToast(`${car.name} Secured in Hangar`, "success");
+        } else {
+          showToast(`${car.name} Released from Hangar`, "success");
+        }
+
         gsap.to(btnRef.current, { 
           backgroundColor: !isInWishlist ? "#2563eb" : "transparent", 
           duration: 0.5 
         });
       }
     } catch (err) {
+      showToast("Sync Error: Docking Failed", "error");
       console.error("Docking update failed:", err);
     } finally {
       setIsSaving(false);
@@ -106,6 +134,7 @@ export default function ProductDetailsPage() {
 
   return (
     <main className="bg-black text-white min-h-screen">
+      {/* ... നിന്റെ ബാക്കി കോഡ് ഇവിടെ വരും (അതിൽ മാറ്റമില്ല) ... */}
       <section className="relative h-screen flex flex-col items-center justify-start pt-12 overflow-hidden">
         
         <div ref={titleRef} className="absolute top-10 w-full text-center pointer-events-none z-0 opacity-10">

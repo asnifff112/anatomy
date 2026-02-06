@@ -17,6 +17,27 @@ export default function LoginPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // പ്രീമിയം കാർ ബ്രാൻഡ് ടോസ്റ്റ് സ്റ്റൈൽ
+  const showToast = (message: string, type: "success" | "error") => {
+    toast(message, {
+      duration: 3000,
+      position: "top-center",
+      style: {
+        background: "#0a0a0a",
+        color: "#fff",
+        border: type === "success" ? "1px solid rgba(37, 99, 235, 0.5)" : "1px solid rgba(239, 68, 68, 0.5)",
+        borderRadius: "0px", 
+        padding: "16px",
+        fontSize: "10px",
+        fontWeight: "bold",
+        textTransform: "uppercase",
+        letterSpacing: "0.2em",
+        fontFamily: "monospace",
+      },
+      icon: type === "success" ? "🔵" : "🚫",
+    });
+  };
+
   useEffect(() => {
     const tl = gsap.timeline();
     tl.fromTo(containerRef.current, { opacity: 0 }, { opacity: 1, duration: 1 })
@@ -26,29 +47,28 @@ export default function LoginPage() {
   }, []);
 
   const handleLogin = async (e: React.FormEvent) => {
-  e.preventDefault();
-  setLoading(true);
+    e.preventDefault();
+    setLoading(true);
 
-  const success = await login(email, password);
+    const success = await login(email, password);
 
-  if (success) {
-    toast.success("Welcome back, Pilot!"); 
-    if (email === "admin@gmail.com") {
-      router.push("/admin/dashboard");
+    if (success) {
+      showToast("Access Granted: Welcome back, Pilot!", "success"); 
+      if (email === "admin@gmail.com") {
+        router.push("/admin/dashboard");
+      } else {
+        router.push("/");
+      }
     } else {
-      router.push("/");
+      showToast("Access Denied: Invalid Credentials", "error"); 
+      gsap.to(formRef.current, { x: 10, duration: 0.1, repeat: 3, yoyo: true });
     }
-  } else {
-    toast.error("Access Denied: Invalid Credentials"); 
-    gsap.to(formRef.current, { x: 10, duration: 0.1, repeat: 3, yoyo: true });
-  }
-  setLoading(false);
-};
+    setLoading(false);
+  };
 
   return (
     <main ref={containerRef} className="min-h-screen bg-black text-white flex items-center justify-center p-6 pt-32 relative overflow-hidden">
       
-      {/* Background Glows */}
       <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-600/10 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-red-600/10 rounded-full blur-[120px] pointer-events-none" />
 
@@ -85,12 +105,6 @@ export default function LoginPage() {
               className="w-full bg-white/5 border border-white/10 p-4 rounded-2xl outline-none focus:border-blue-600 focus:bg-white/10 transition-all font-mono text-sm"
             />
           </div>
-
-          {error && (
-            <div className="bg-red-500/10 border border-red-500/50 p-3 rounded-xl">
-               <p className="text-red-500 text-[11px] font-bold uppercase text-center tracking-tighter">{error}</p>
-            </div>
-          )}
 
           <button 
             disabled={loading}
