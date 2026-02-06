@@ -16,7 +16,6 @@ export default function LoginPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  
   useEffect(() => {
     const tl = gsap.timeline();
     tl.fromTo(containerRef.current, { opacity: 0 }, { opacity: 1, duration: 1 })
@@ -30,14 +29,19 @@ export default function LoginPage() {
     setError("");
     setLoading(true);
 
-    
+    // AuthContext-ലെ ലോഗിൻ ഫങ്ക്ഷൻ വിളിക്കുന്നു
     const success = await login(email, password);
 
     if (success) {
-      router.push("/");
+      // അഡ്മിൻ ആണോ എന്ന് ചെക്ക് ചെയ്യുന്നു
+      if (email === "admin@gmail.com") {
+        router.push("/admin/dashboard");
+      } else {
+        router.push("/"); // സാധാരണ യൂസർ ആണെങ്കിൽ ഹോം പേജിലേക്ക്
+      }
     } else {
       setError("Invalid email or password");
-    
+      // തെറ്റായ പാസ്‌വേഡ് അടിച്ചാൽ Shake ആനിമേഷൻ
       gsap.to(formRef.current, { x: 10, duration: 0.1, repeat: 3, yoyo: true });
     }
     setLoading(false);
@@ -46,6 +50,7 @@ export default function LoginPage() {
   return (
     <main ref={containerRef} className="min-h-screen bg-black text-white flex items-center justify-center p-6 pt-32 relative overflow-hidden">
       
+      {/* Background Glows */}
       <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-600/10 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-red-600/10 rounded-full blur-[120px] pointer-events-none" />
 
@@ -64,17 +69,19 @@ export default function LoginPage() {
             <input
               type="email"
               placeholder="pilot@velocity.vpx"
+              value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
               className="w-full bg-white/5 border border-white/10 p-4 rounded-2xl outline-none focus:border-blue-600 focus:bg-white/10 transition-all font-mono text-sm"
             />
           </div>
 
-\          <div className="group">
+          <div className="group">
             <label className="text-[10px] uppercase font-bold text-zinc-500 tracking-widest ml-1 mb-2 block group-focus-within:text-blue-500 transition-colors">Security Key</label>
             <input
               type="password"
               placeholder="••••••••"
+              value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
               className="w-full bg-white/5 border border-white/10 p-4 rounded-2xl outline-none focus:border-blue-600 focus:bg-white/10 transition-all font-mono text-sm"
