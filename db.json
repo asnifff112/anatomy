@@ -85,10 +85,10 @@
   "users": [
     {
       "id": "1",
-      "name": "Admin Pilot",
-      "email": "admin@velocity.com",
-      "password": "password123",
-      "callsign": "OVERLORD"
+      "name": "Admin",
+      "email": "admin@gmail.com.com",
+      "password": "123456",
+      "callsign": "adminn-1"
     },
     {
       "id": "2",
