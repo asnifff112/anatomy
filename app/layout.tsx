@@ -17,9 +17,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="bg-black text-white antialiased overflow-x-hidden">
         <AuthProvider>
           {!isAdminPage && <Navbar />}
-
           {children}
-
           {!isAdminPage && <Footer />}
         </AuthProvider>
       </body>
