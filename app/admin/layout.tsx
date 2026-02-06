@@ -12,14 +12,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Sidebar Entrance
+   
       gsap.from(sidebarRef.current, { 
         x: -100, 
         opacity: 0, 
         duration: 1, 
         ease: "power3.out" 
       });
-      // Content Fade-in
       gsap.from(contentRef.current, { 
         opacity: 0, 
         y: 20, 
@@ -28,7 +27,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       });
     });
     return () => ctx.revert();
-  }, [pathname]); // ഓരോ പേജ് മാറുമ്പോഴും ചെറിയൊരു ആനിമേഷൻ വരും
+  }, [pathname]); 
 
   const menuItems = [
     { name: "Dashboard", path: "/admin/dashboard", icon: <LayoutDashboard size={20} /> },
