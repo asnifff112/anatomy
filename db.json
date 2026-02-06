@@ -110,6 +110,16 @@
         },
         "m4-competition"
       ]
+    },
+    {
+      "id": "9bd2",
+      "name": "asii",
+      "email": "asif@gmail.com",
+      "password": "123456",
+      "callsign": "loo",
+      "wishlist": [
+        "m4-competition"
+      ]
     }
   ]
 }
