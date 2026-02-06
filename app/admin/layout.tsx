@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import gsap from "gsap";
-import { LayoutDashboard, CarFront, Users, LogOut, Box } from "lucide-react";
+import { LayoutDashboard, CarFront, Users, LogOut} from "lucide-react";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
