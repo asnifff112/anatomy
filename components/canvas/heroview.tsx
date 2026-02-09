@@ -61,7 +61,6 @@ export default function HeroView({ modelUrl = "/car.glb", onReady }: { modelUrl?
       <Canvas camera={{ position: [8, 4, 12], fov: 25 }} gl={{ antialias: true, toneMappingExposure: 1.2 }}>
         <Suspense fallback={null}>
           <ambientLight intensity={0.5} />
-          {/* കീ ലൈറ്റ് - കാറിന് നല്ല ഷേപ്പ് കിട്ടാൻ */}
           <spotLight position={[10, 15, 10]} intensity={2.5} angle={0.3} penumbra={1} castShadow />
           <directionalLight position={[-10, 5, 5]} intensity={1} color="#ffffff" />
           
