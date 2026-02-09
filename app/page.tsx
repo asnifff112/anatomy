@@ -48,17 +48,14 @@ export default function HomePage() {
   return (
     <main ref={containerRef} className="relative w-full h-screen bg-[#050505] overflow-hidden">
       
-      {/* Background Glow */}
       <div className="bg-glow absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-blue-600/10 blur-[150px] rounded-full pointer-events-none" />
 
-      {/* Backdrop Name */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none">
         <h1 ref={brandRef} className="text-[25vw] font-black text-white/[0.01] uppercase tracking-tighter leading-none">
           ANATOMY
         </h1>
       </div>
 
-      {/* 3D Model Canvas - Position adjusted to the right */}
       <div className="absolute inset-0 z-0 translate-x-[20%] md:translate-x-[9%]">
         <HeroView 
           modelUrl="/car.glb" 
