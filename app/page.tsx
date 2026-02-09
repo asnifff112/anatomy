@@ -106,7 +106,6 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* SIDEBAR */}
       <div className="absolute right-8 top-0 h-full flex flex-col justify-center items-center z-20 pointer-events-none">
         <div className="w-[1px] h-20 bg-gradient-to-b from-transparent to-blue-600/50 mb-6"></div>
         <div className="flex flex-col items-center">
