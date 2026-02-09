@@ -26,24 +26,20 @@ function Model({ url, onReady }: { url: string; onReady: () => void }) {
         if ((child as THREE.Mesh).isMesh) {
           const name = child.name.toLowerCase();
 
-          // ഡോറുകൾ - ഒരേ സമയം രണ്ട് വശത്തേക്കും തുറക്കുന്നു
           if (name.includes("door") || name.includes("box156") || name.includes("box216")) {
             tl.to(child.rotation, {
               y: name.includes("left") || name.includes("156") ? 1.5 : -1.5,
-            }, "-=1.5"); // കാർ വന്നു നിൽക്കുമ്പോൾ തന്നെ തുടങ്ങാൻ
+            }, "-=1.5"); 
           }
 
-          // ബോണറ്റ് - മുകളിലേക്ക് തുറക്കുന്നു
           if (name.includes("bonnet") || name.includes("hood") || name.includes("box42")) {
             tl.to(child.rotation, { x: -1.2 }, "-=1.5");
           }
 
-          // ഡിക്കി/ബൂട്ട്
           if (name.includes("boot") || name.includes("trunk") || name.includes("box110")) {
             tl.to(child.rotation, { x: 1.1 }, "-=1.5");
           }
           
-          // വീലുകൾ കറങ്ങാൻ (എൻട്രി സമയത്ത്)
           if (name.includes("wheel")) {
             gsap.to(child.rotation, {
               x: Math.PI * 4,
