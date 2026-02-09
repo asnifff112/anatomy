@@ -6,11 +6,12 @@ import { AuthProvider } from "@/app/context/AuthContext";
 import { usePathname } from "next/navigation"; 
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
+import TargetCursor from "@/components/ui/TargetCursor";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-
   
+  // Admin പേജുകളിൽ Navbar, Footer എന്നിവ ഒഴിവാക്കാൻ
   const isAdminPage = pathname.startsWith("/admin");
 
   return (
@@ -18,8 +19,23 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="bg-black text-white antialiased overflow-x-hidden">
         <AuthProvider>
           <Toaster position="top-center" reverseOrder={false} />
+          
+          {/* Custom Cursor Component */}
+          
+              <TargetCursor 
+        spinDuration={2}
+        hideDefaultCursor
+        parallaxOn
+  hoverDuration={0.2}
+/>
+          
+
           {!isAdminPage && <Navbar />}
-          {children}
+          
+          <main className="min-h-screen">
+            {children}
+          </main>
+
           {!isAdminPage && <Footer />}
         </AuthProvider>
       </body>

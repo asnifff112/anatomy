@@ -117,7 +117,16 @@
       "email": "asif@gmail.com",
       "password": "1234567",
       "callsign": "loo",
-      "wishlist": []
+      "wishlist": [
+        "m4-competition"
+      ]
+    },
+    {
+      "id": "79c7",
+      "name": "abid",
+      "email": "abid@gmail.com",
+      "password": "123456",
+      "callsign": "abid-1"
     }
   ]
 }
