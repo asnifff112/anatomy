@@ -63,17 +63,14 @@ export default function HomePage() {
         />
       </div>
 
-      {/* Hero Content */}
       <div className="absolute inset-0 z-10 flex flex-col justify-between p-12 pointer-events-none">
         
-        {/* Header */}
         <div className="flex justify-end items-start pointer-events-auto">
           <div className="hidden md:block text-white/40 text-[10px] tracking-[0.4em] uppercase">
             Designed for the future / 2026
           </div>
         </div>
 
-        {/* Bottom Heading & Button */}
         <div className="max-w-4xl pointer-events-auto">
           <h2 className="text-white text-7xl md:text-9xl font-black italic leading-[0.85] tracking-tighter uppercase">
             <span className="char inline-block">REDEF</span>
