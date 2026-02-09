@@ -12,31 +12,26 @@ export default function HomePage() {
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
 
-      // 1. വലിയ ബാക്ക്ഡ്രോപ്പ് ബ്രാൻഡ് നെയിം
       tl.fromTo(brandRef.current, 
         { opacity: 0, scale: 0.8, y: 50 }, 
         { opacity: 1, scale: 1, y: 0, duration: 2, delay: 0.5 }
       );
 
-      // 2. മെയിൻ ഹെഡിംഗ് ആനിമേഷൻ
       tl.fromTo(".char", 
         { y: 100, opacity: 0 }, 
         { y: 0, opacity: 1, stagger: 0.05, duration: 1 }, "-=1"
       );
 
-      // 3. സൈഡ് ബാർ ടെക്സ്റ്റ് ആനിമേഷൻ
       tl.fromTo(".sidebar-char", 
         { opacity: 0, x: 20 }, 
         { opacity: 1, x: 0, stagger: 0.1, duration: 1, ease: "back.out(2)" }, "-=0.5"
       );
 
-      // 4. ബട്ടണും വിവരണവും
       tl.fromTo(contentRef.current, 
         { opacity: 0, x: -50 }, 
         { opacity: 1, x: 0, duration: 1 }, "-=0.5"
       );
 
-      // ബാക്ക്ഗ്രൗണ്ട് ഗ്ലോ പൾസിംഗ്
       gsap.to(".bg-glow", {
         opacity: 0.4,
         scale: 1.2,
