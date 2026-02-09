@@ -1,89 +1,152 @@
 "use client";
 import { useState, useEffect } from "react";
 import LabView from "@/components/canvas/labview";
+import { motion, AnimatePresence } from "framer-motion";
+import { Search, Zap, Gauge, ArrowUpRight } from "lucide-react";
+import Link from "next/link";
+
+interface Car {
+  id: string;
+  name: string;
+  price: string;
+  modelUrl: string;
+  stats: {
+    engine: string;
+    power: string;
+  };
+}
 
 export default function LabPage() {
-  const [isExploded, setIsExploded] = useState(false);
-  const [currentTime, setCurrentTime] = useState("");
+  const [cars, setCars] = useState<Car[]>([]);
+  const [selectedCar, setSelectedCar] = useState<Car | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
-  // ഡിജിറ്റൽ ക്ലോക്കിന് വേണ്ടി
   useEffect(() => {
-    const timer = setInterval(() => {
-      const now = new Date();
-      setCurrentTime(now.getHours() + ":" + now.getMinutes().toString().padStart(2, '0') + ":" + now.getSeconds().toString().padStart(2, '0'));
-    }, 1000);
-    return () => clearInterval(timer);
+    fetch("/db.json")
+      .then((res) => {
+        if (!res.ok) throw new Error("Network response was not ok");
+        return res.json();
+      })
+      .then((data) => {
+        if (data.cars && data.cars.length > 0) {
+          setCars(data.cars);
+          setSelectedCar(data.cars[0]);
+        }
+      })
+      .catch((err) => console.error("Fetch Error:", err));
   }, []);
 
+  const filteredCars = cars.filter((car) =>
+    car.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  if (!selectedCar) {
+    return (
+      <div className="h-screen bg-[#050505] flex items-center justify-center text-blue-500 font-mono tracking-[0.5em] animate-pulse">
+        SYNCING_SYSTEM...
+      </div>
+    );
+  }
+
   return (
-    <main className="relative w-full h-screen bg-[#020202] overflow-hidden font-mono selection:bg-blue-500/30">
+    <main className="relative w-full h-screen bg-[#020202] text-white overflow-hidden">
       
-      {/* --- ഹെഡർ സെക്ഷൻ --- */}
-      <div className="absolute top-0 left-0 w-full p-8 flex justify-between items-start z-20 pointer-events-none">
-        <div>
-          <h1 className="text-5xl font-black tracking-tighter uppercase italic text-transparent bg-clip-text bg-gradient-to-r from-white via-blue-400 to-blue-800 animate-pulse">
-            LAB_SESSION_01
-          </h1>
-          <div className="flex items-center gap-2 mt-2">
-            <span className="w-2 h-2 bg-red-600 rounded-full animate-ping" />
-            <p className="text-blue-500 text-xs tracking-[0.3em] uppercase font-bold">System Active: Scanning for anomalies</p>
+      {/* Side Inventory */}
+      <div className="absolute left-0 top-0 h-full w-80 bg-black/40 backdrop-blur-xl z-30 border-r border-white/5 flex flex-col shadow-2xl">
+        <div className="p-8">
+          <h1 className="text-2xl font-black italic uppercase tracking-tighter">V_LAB.01</h1>
+          <p className="text-blue-500 text-[10px] font-bold tracking-[0.3em] uppercase opacity-80">Inventory System</p>
+        </div>
+
+        <div className="px-6 mb-6">
+          <div className="relative group">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20 group-focus-within:text-blue-500 transition-colors" />
+            <input 
+              type="text"
+              placeholder="SEARCH_UNITS..."
+              className="w-full bg-white/5 border border-white/10 py-3 pl-10 pr-4 text-[10px] tracking-widest focus:outline-none focus:border-blue-500/50 transition-all font-mono uppercase"
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
           </div>
         </div>
-        
-        <div className="text-right">
-          <p className="text-white text-2xl font-light tracking-widest">{currentTime}</p>
-          <p className="text-blue-500/50 text-[10px] uppercase tracking-tighter">Diagnostic Link: Connected</p>
+
+        <div className="flex-1 overflow-y-auto px-4 space-y-2 pb-10 custom-scrollbar">
+          {filteredCars.map((car) => (
+            <div
+              key={car.id}
+              onClick={() => setSelectedCar(car)}
+              className={`p-5 cursor-pointer transition-all duration-300 rounded-lg border ${
+                selectedCar.id === car.id 
+                ? "bg-blue-600/10 border-blue-500/50" 
+                : "bg-white/5 border-transparent hover:bg-white/10"
+              }`}
+            >
+              <span className="text-[9px] text-white/30 uppercase font-mono">ID: {car.id}</span>
+              <h3 className="font-bold uppercase italic text-sm">{car.name}</h3>
+              <p className="text-blue-400 text-xs font-black mt-1">{car.price}</p>
+            </div>
+          ))}
         </div>
       </div>
 
-      {/* --- ഹൈ-ടെക് സൈഡ് ഡാറ്റ പാനലുകൾ --- */}
-      <div className="absolute left-8 top-1/2 -translate-y-1/2 flex flex-col gap-6 z-20 opacity-60">
-        {[ "Engine_RPM: 0.0", "Pressure: 1.2bar", "Temp: 24°C", "Core: Stable" ].map((data, i) => (
-          <div key={i} className="border-l-2 border-blue-600 pl-4 py-1">
-            <p className="text-white text-[10px] tracking-tighter uppercase mb-1 opacity-50">Data_Point_0{i+1}</p>
-            <p className="text-blue-400 font-bold text-sm tracking-widest">{data}</p>
-          </div>
-        ))}
-      </div>
-
-      {/* --- 3D മോഡൽ വ്യൂവർ --- */}
-      <div className="w-full h-full z-10 cursor-crosshair">
-        <LabView modelUrl="/car.glb" isExploded={isExploded} />
-      </div>
-
-      {/* --- ബട്ടൺ സെക്ഷൻ വിത്ത് ലേസർ ലൈൻ --- */}
-      <div className="absolute bottom-10 left-10 right-10 flex justify-between items-end z-20">
-        <div className="w-1/3 h-[1px] bg-gradient-to-r from-transparent via-blue-500 to-transparent opacity-30" />
-        
-        <div className="flex flex-col items-center gap-4">
-          <div className="flex gap-2">
-            <div className={`h-1 w-8 transition-all duration-500 ${isExploded ? 'bg-blue-600 shadow-[0_0_10px_#2563eb]' : 'bg-zinc-800'}`} />
-            <div className={`h-1 w-8 transition-all duration-500 ${isExploded ? 'bg-blue-600 shadow-[0_0_10px_#2563eb]' : 'bg-zinc-800'}`} />
-            <div className={`h-1 w-8 transition-all duration-500 ${isExploded ? 'bg-blue-600 shadow-[0_0_10px_#2563eb]' : 'bg-zinc-800'}`} />
-          </div>
-
-          <button 
-            onClick={() => setIsExploded(!isExploded)}
-            className="group relative px-12 py-5 bg-transparent overflow-hidden border border-blue-500/30"
+      {/* 3D Viewport */}
+      <div className="absolute inset-0 z-10 ml-80 pointer-events-auto">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={selectedCar.id}
+            initial={{ x: 100, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: -100, opacity: 0 }}
+            transition={{ duration: 0.5 }}
+            className="w-full h-full"
           >
-            {/* ബട്ടൺ ബാക്ക്ഗ്രൗണ്ട് ആനിമേഷൻ */}
-            <div className="absolute inset-0 bg-blue-600 translate-y-[100%] group-hover:translate-y-0 transition-transform duration-500" />
-            
-            <span className="relative z-10 text-white font-black uppercase tracking-[0.4em] text-sm group-hover:text-black transition-colors duration-500">
-              {isExploded ? "Reset_Core" : "Initialize_Scan"}
-            </span>
-
-            {/* കോർണർ ഡീറ്റൈൽസ് */}
-            <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-blue-500" />
-            <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-blue-500" />
-          </button>
-        </div>
-
-        <div className="w-1/3 h-[1px] bg-gradient-to-l from-transparent via-blue-500 to-transparent opacity-30" />
+            <LabView modelUrl={selectedCar.modelUrl} />
+          </motion.div>
+        </AnimatePresence>
       </div>
 
-      {/* ബാഗ്രൗണ്ട് ഗ്രിഡ് ലൈനുകൾ */}
-      <div className="absolute inset-0 pointer-events-none opacity-10 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] z-0 bg-[length:100%_2px,3px_100%]" />
+      {/* HUD & Action Button */}
+      <div className="absolute bottom-10 right-10 z-20 text-right">
+        <motion.div
+          key={`data-${selectedCar.id}`}
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+        >
+          <h2 className="text-7xl font-black italic uppercase tracking-tighter leading-none mb-6">{selectedCar.name}</h2>
+          
+          <div className="flex flex-col items-end gap-6">
+            <div className="flex justify-end gap-10 bg-black/60 backdrop-blur-md p-6 border-r-4 border-blue-600">
+              <div className="text-right">
+                <span className="text-blue-500 text-[10px] font-bold uppercase tracking-widest flex items-center justify-end gap-2">
+                  <Zap size={12}/> Power
+                </span>
+                <p className="text-2xl font-black italic">{selectedCar.stats.power}</p>
+              </div>
+              <div className="text-right">
+                <span className="text-blue-500 text-[10px] font-bold uppercase tracking-widest flex items-center justify-end gap-2">
+                  <Gauge size={12}/> Engine
+                </span>
+                <p className="text-2xl font-black italic">{selectedCar.stats.engine}</p>
+              </div>
+            </div>
+
+            {/* The Action Button */}
+            <Link href={`/products/${selectedCar.id}`} className="pointer-events-auto">
+              <motion.button
+                whileHover={{ scale: 1.05, backgroundColor: "#2563eb" }}
+                whileTap={{ scale: 0.95 }}
+                className="flex items-center gap-3 bg-blue-700 text-white px-10 py-4 font-black italic uppercase tracking-widest skew-x-[-15deg] shadow-[0_0_20px_rgba(37,99,235,0.4)]"
+              >
+                <span className="skew-x-[15deg]">Inspect Unit</span>
+                <ArrowUpRight className="skew-x-[15deg]" size={20} />
+              </motion.button>
+            </Link>
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Grid Decor */}
+      <div className="absolute inset-0 pointer-events-none opacity-10 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:40px_40px]" />
     </main>
   );
 }

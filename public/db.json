@@ -98,8 +98,7 @@
       "name": "Admin",
       "email": "admin@gmail.com",
       "password": "123456",
-      "callsign": "adminn-1",
-      "status": "Active"
+      "callsign": "adminn-1"
     },
     {
       "id": "1705",
@@ -108,12 +107,8 @@
       "password": "123456",
       "callsign": "azii-1",
       "wishlist": [
-        {
-          "id": "m4-competition",
-          "color": "#0a0a0a"
-        }
-      ],
-      "status": "Blocked"
+        { "id": "m4-competition", "color": "#0a0a0a" }
+      ]
     }
   ]
 }

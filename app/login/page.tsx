@@ -14,19 +14,17 @@ export default function LoginPage() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // പ്രീമിയം കാർ ബ്രാൻഡ് ടോസ്റ്റ് സ്റ്റൈൽ
   const showToast = (message: string, type: "success" | "error") => {
     toast(message, {
-      duration: 3000,
+      duration: 4000,
       position: "top-center",
       style: {
         background: "#0a0a0a",
         color: "#fff",
         border: type === "success" ? "1px solid rgba(37, 99, 235, 0.5)" : "1px solid rgba(239, 68, 68, 0.5)",
-        borderRadius: "0px", 
+        borderRadius: "0px",
         padding: "16px",
         fontSize: "10px",
         fontWeight: "bold",
@@ -50,25 +48,48 @@ export default function LoginPage() {
     e.preventDefault();
     setLoading(true);
 
-    const success = await login(email, password);
+    try {
+      const response = await fetch(`http://localhost:5000/users?email=${email}`);
+      const userData = await response.json();
 
-    if (success) {
-      showToast("Access Granted: Welcome back, Pilot!", "success"); 
-      if (email === "admin@gmail.com") {
-        router.push("/admin/dashboard");
-      } else {
-        router.push("/");
+      if (userData.length > 0) {
+        const user = userData[0];
+
+        if (user.status === "Blocked") {
+          showToast("ACCESS REVOKED: YOUR LICENSE HAS BEEN TERMINATED", "error");
+          gsap.to(formRef.current, { x: 10, duration: 0.1, repeat: 3, yoyo: true });
+          setLoading(false);
+          return; 
+        }
       }
-    } else {
-      showToast("Access Denied: Invalid Credentials", "error"); 
-      gsap.to(formRef.current, { x: 10, duration: 0.1, repeat: 3, yoyo: true });
+
+      // 3. ബ്ലോക്ക് അല്ലെങ്കിൽ മാത്രം AuthContext വഴി ലോഗിൻ ചെയ്യാൻ ശ്രമിക്കുന്നു
+      const success = await login(email, password);
+
+      if (success) {
+        showToast("Access Granted: Welcome back, Pilot!", "success");
+        // ഇമെയിൽ നോക്കി അഡ്മിൻ ആണോ എന്ന് തിരിക്കുന്നു
+        if (email === "admin@gmail.com") {
+          router.push("/admin/dashboard");
+        } else {
+          router.push("/");
+        }
+      } else {
+        showToast("Access Denied: Invalid Credentials", "error");
+        gsap.to(formRef.current, { x: 10, duration: 0.1, repeat: 3, yoyo: true });
+      }
+    } catch (err) {
+      console.error("Verification Error:", err);
+      showToast("System Error: Radar Offline", "error");
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   return (
     <main ref={containerRef} className="min-h-screen bg-black text-white flex items-center justify-center p-6 pt-32 relative overflow-hidden">
       
+      {/* Background Decor */}
       <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-600/10 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-red-600/10 rounded-full blur-[120px] pointer-events-none" />
 
