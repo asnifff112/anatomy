@@ -90,6 +90,22 @@
           "image": "/parts/bmw-engine.png"
         }
       ]
+    },
+    {
+      "id": "toyota-fortuner",
+      "name": "Toyota Fortuner",
+      "price": "$12,000",
+      "modelUrl": "/fortuner.glb",
+      "labScale": 1.2,
+      "cardScale": 0.8,
+      "stats": {
+        "engine": "2.7L Petrol Engine",
+        "power": "Petrol: ~164–166 HP",
+        "topSpeed": "175–190 km/h",
+        "acceleration": "9.5–10.5 seconds"
+      },
+      "features": [],
+      "parts": []
     }
   ],
   "users": [

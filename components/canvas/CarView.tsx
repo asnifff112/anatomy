@@ -1,71 +1,63 @@
 "use client";
 import { Canvas } from "@react-three/fiber";
-import { useGLTF, OrbitControls, Stage } from "@react-three/drei";
-import { Suspense, useEffect } from "react";
+import { OrbitControls, Stage, useGLTF, PerspectiveCamera, ContactShadows } from "@react-three/drei";
+import { Suspense, useLayoutEffect, useRef } from "react";
 import * as THREE from "three";
 
 function Model({ url, color }: { url: string; color: string }) {
   const { scene } = useGLTF(url);
 
-  useEffect(() => {
-    scene.traverse((child) => {
-      if ((child as THREE.Mesh).isMesh) {
-        const mesh = child as THREE.Mesh;
-        const name = mesh.name.toLowerCase();
+  useLayoutEffect(() => {
+    if (scene) {
+      scene.scale.set(1, 1, 1);
+      const box = new THREE.Box3().setFromObject(scene);
+      const size = box.getSize(new THREE.Vector3());
+      const maxDim = Math.max(size.x, size.y, size.z);
+      
+      // Standard scale factor (4.5 fits perfectly in the frame)
+      const scaleFactor = 4.5 / maxDim;
+      scene.scale.set(scaleFactor, scaleFactor, scaleFactor);
+      
+      const center = box.getCenter(new THREE.Vector3());
+      scene.position.x -= center.x * scaleFactor;
+      scene.position.y -= center.y * scaleFactor;
+      scene.position.z -= center.z * scaleFactor;
 
-        const isGlass = name.includes("glass") || name.includes("window") || name.includes("windshield");
-        const isWheel = name.includes("wheel") || name.includes("tire") || name.includes("rim") || name.includes("alloy");
-        const isInterior = name.includes("interior") || name.includes("seat") || name.includes("dash");
-
-        if (isGlass) {
-          mesh.material = new THREE.MeshPhysicalMaterial({
-            color: new THREE.Color("#080808"),
-            metalness: 0.9,
-            roughness: 0.05,
-            transmission: 0.9,
-            transparent: true,
-            opacity: 0.5,
-          });
-        } 
-        else if (isWheel) {
-          const wheelMaterial = new THREE.MeshStandardMaterial({
-            color: name.includes("tire") ? new THREE.Color("#111111") : new THREE.Color("#888888"),
-            metalness: 0.9,
-            roughness: 0.2,
-          });
-          mesh.material = wheelMaterial;
-        } 
-        else if (!isInterior && !name.includes("light")) {
-          
-          if (mesh.material) {
-            const newMaterial = (mesh.material as THREE.MeshStandardMaterial).clone();
-            newMaterial.color.set(new THREE.Color(color));
-            newMaterial.roughness = 0.3;
-            newMaterial.metalness = 0.7;
-            mesh.material = newMaterial;
+      scene.traverse((obj) => {
+        if ((obj as THREE.Mesh).isMesh) {
+          const mesh = obj as THREE.Mesh;
+          mesh.castShadow = true;
+          mesh.receiveShadow = true;
+          if (mesh.name.toLowerCase().includes("body") || mesh.name.toLowerCase().includes("paint")) {
+            (mesh.material as THREE.MeshStandardMaterial).color.set(color);
           }
         }
-      }
-    });
-  }, [scene, color]);
+      });
+    }
+  }, [scene, url, color]);
 
-  return <primitive object={scene} scale={1} position={[0, -0.2, 0]} />;
+  return <primitive object={scene} />;
 }
 
 export default function CarView({ modelUrl, selectedColor }: { modelUrl: string; selectedColor: string }) {
   return (
-    <div className="h-full w-full">
-      <Canvas shadows dpr={[1, 2]} camera={{ position: [0, 2, 6], fov: 35 }}>
+    <div className="w-full h-full cursor-grab active:cursor-grabbing">
+      <Canvas shadows dpr={[1, 2]}>
         <Suspense fallback={null}>
-          <Stage environment="city" intensity={0.5} adjustCamera={1.5}>
+          <PerspectiveCamera makeDefault position={[0, 1, 8]} fov={25} />
+          <Stage environment="city" intensity={0.5} adjustCamera={false}>
             <Model url={modelUrl} color={selectedColor} />
           </Stage>
-          <OrbitControls 
-            enableZoom={false} 
-            maxPolarAngle={Math.PI / 2.2} 
-            minPolarAngle={Math.PI / 3}
-          />
+          <ContactShadows position={[0, -0.01, 0]} opacity={0.5} scale={10} blur={2.5} far={1} />
         </Suspense>
+        <OrbitControls 
+          enableZoom={false} 
+          enablePan={false}  
+          autoRotate={true}
+          autoRotateSpeed={0.5}
+          minPolarAngle={Math.PI / 2.8} 
+          maxPolarAngle={Math.PI / 2.1} 
+        />
       </Canvas>
     </div>
   );

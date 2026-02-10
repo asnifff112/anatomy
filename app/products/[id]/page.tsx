@@ -1,201 +1,145 @@
 "use client";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
 import { gsap } from "gsap";
-import { useAuth } from "@/app/context/AuthContext";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import ProductFeatures from "@/components/ProductFeatures";
 import CarView from "@/components/canvas/carview";
-import { toast } from "react-hot-toast";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const DB_URL = "http://localhost:5000/cars";
-const USER_URL = "http://localhost:5000/users";
-
 const COLOR_OPTIONS = [
-  { name: "White", hex: "#ffffff" },
-  { name: "Blue", hex: "#0011ff" },
-  { name: "Red", hex: "#cc0000" },
-  { name: "Black", hex: "#0a0a0a" },
-  { name: "Green", hex: "#003311" },
+  { name: "Pure White", hex: "#ffffff" },
+  { name: "Electric Blue", hex: "#0033ff" },
+  { name: "Rosso Corsa", hex: "#cc0000" },
+  { name: "Obsidian Black", hex: "#0a0a0a" },
 ];
 
 export default function ProductDetailsPage() {
   const { id } = useParams();
-  const router = useRouter();
-  const { user } = useAuth(); 
   const [car, setCar] = useState<any>(null);
-  const [userData, setUserData] = useState<any>(null);
   const [selectedColor, setSelectedColor] = useState(COLOR_OPTIONS[0].hex);
-  const [isSaving, setIsSaving] = useState(false);
-  const [isSaved, setIsSaved] = useState(false);
-
+  
   const titleRef = useRef(null);
-  const btnRef = useRef(null);
-
-  // ടോസ്റ്റ് നോട്ടിഫിക്കേഷൻ സ്റ്റൈൽ - കാർ എക്സ്പീരിയൻസിന് അനുയോജ്യമായത്
-  const showToast = (message: string, type: "success" | "error") => {
-    toast(message, {
-      duration: 3000,
-      position: "top-right",
-      style: {
-        background: "#0a0a0a",
-        color: "#fff",
-        border: "1px solid rgba(37, 99, 235, 0.5)",
-        borderRadius: "0px", // കാർ ഡിസൈനിലെ ഷാർപ്പ് ലുക്കിന്
-        padding: "16px",
-        fontSize: "10px",
-        fontWeight: "bold",
-        textTransform: "uppercase",
-        letterSpacing: "0.2em",
-        fontFamily: "monospace",
-      },
-      icon: type === "success" ? "🔵" : "⚠️",
-    });
-  };
+  const carRef = useRef(null);
+  const statsRef = useRef(null);
+  const priceCardRef = useRef(null);
+  const statItems = useRef<HTMLDivElement[]>([]);
 
   useEffect(() => {
     fetch(`${DB_URL}/${id}`)
       .then((res) => res.json())
-      .then((data) => setCar(data))
-      .catch((err) => console.error(err));
+      .then((data) => {
+        setCar(data);
+        
+        const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
+        tl.fromTo(titleRef.current, { y: 100, opacity: 0 }, { y: 0, opacity: 0.1, duration: 1.5 })
+          .fromTo(carRef.current, { scale: 0.7, opacity: 0 }, { scale: 1, opacity: 1, duration: 2 }, "-=1.2")
+          .fromTo(priceCardRef.current, { x: -50, opacity: 0 }, { x: 0, opacity: 1, duration: 1 }, "-=1");
+
+        gsap.fromTo(statItems.current, 
+          { y: 60, opacity: 0 },
+          { 
+            y: 0, 
+            opacity: 1, 
+            duration: 1, 
+            stagger: 0.2, 
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: statsRef.current,
+              start: "top 85%",
+            }
+          }
+        );
+      });
   }, [id]);
 
-  useEffect(() => {
-    const checkWishlistStatus = async () => {
-      if (user?.id) {
-        try {
-          const res = await fetch(`${USER_URL}/${user.id}`);
-          const data = await res.json();
-          setUserData(data);
-          if (data.wishlist?.includes(id)) {
-            setIsSaved(true);
-          }
-        } catch (err) {
-          console.error("User fetch error:", err);
-        }
-      }
-    };
-    checkWishlistStatus();
-  }, [id, user]);
+  if (!car) return <div className="h-screen bg-black flex items-center justify-center text-blue-500 font-mono tracking-[0.5em] animate-pulse">LOADING_ENGINE...</div>;
 
-  const toggleHangar = async () => {
-    if (!user?.id) {
-      showToast("Access Denied: Please login first", "error");
-      router.push("/login");
-      return;
-    }
-    
-    setIsSaving(true);
-    gsap.to(btnRef.current, { scale: 0.9, duration: 0.1, yoyo: true, repeat: 1 });
-
-    try {
-      const userRes = await fetch(`${USER_URL}/${user.id}`);
-      const currentData = await userRes.json();
-      
-      let updatedWishlist = currentData.wishlist || [];
-      const isInWishlist = updatedWishlist.includes(id);
-
-      if (isInWishlist) {
-        updatedWishlist = updatedWishlist.filter((itemId: string) => itemId !== id);
-      } else {
-        updatedWishlist = [...updatedWishlist, id];
-      }
-
-      const patchRes = await fetch(`${USER_URL}/${user.id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ wishlist: updatedWishlist }),
-      });
-
-      if (patchRes.ok) {
-        setIsSaved(!isInWishlist);
-        setUserData({ ...currentData, wishlist: updatedWishlist });
-        
-        // ടോസ്റ്റ് മെസ്സേജ് കാണിക്കുന്നു
-        if (!isInWishlist) {
-          showToast(`${car.name} Secured in Hangar`, "success");
-        } else {
-          showToast(`${car.name} Released from Hangar`, "success");
-        }
-
-        gsap.to(btnRef.current, { 
-          backgroundColor: !isInWishlist ? "#2563eb" : "transparent", 
-          duration: 0.5 
-        });
-      }
-    } catch (err) {
-      showToast("Sync Error: Docking Failed", "error");
-      console.error("Docking update failed:", err);
-    } finally {
-      setIsSaving(false);
-    }
-  };
-
-  if (!car) return <div className="h-screen bg-black flex items-center justify-center text-white font-mono uppercase tracking-[0.5em]">Syncing_Data...</div>;
+  const carStats = [
+    { label: "0-100 KM/H", value: car.stats?.acceleration || "2.8S" },
+    { label: "Top Speed", value: car.stats?.topSpeed || "325KM/H" },
+    { label: "Peak Power", value: car.stats?.power || "710HP" },
+    { label: "Curb Weight", value: "1,420KG" },
+  ];
 
   return (
-    <main className="bg-black text-white min-h-screen">
-      {/* ... നിന്റെ ബാക്കി കോഡ് ഇവിടെ വരും (അതിൽ മാറ്റമില്ല) ... */}
-      <section className="relative h-screen flex flex-col items-center justify-start pt-12 overflow-hidden">
+    <main className="bg-black text-white min-h-screen overflow-x-hidden font-sans">
+      
+      {/* SECTION 1: HERO VIEW */}
+      <section className="relative h-screen w-full flex flex-col items-center justify-center overflow-hidden">
         
-        <div ref={titleRef} className="absolute top-10 w-full text-center pointer-events-none z-0 opacity-10">
-          <h1 className="text-[15vw] font-black uppercase italic leading-none tracking-tighter">{car.name}</h1>
+        {/* BG LARGE TEXT */}
+        <div ref={titleRef} className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
+          <h1 className="text-[22vw] font-black uppercase italic leading-none tracking-tighter opacity-10 select-none">
+            {car.name}
+          </h1>
         </div>
 
-        <div className="relative z-10 w-full h-[75vh] mt-4">
-          <CarView modelUrl={car.modelUrl} selectedColor={selectedColor} />
-          
-          <div className="absolute right-10 top-1/2 -translate-y-1/2 flex flex-col gap-6 z-20">
-             <div className="flex flex-col items-end">
-                <p className="text-[8px] font-black text-blue-500 tracking-[0.3em] mb-2 uppercase">Protocol_09</p>
-                <button 
-                  ref={btnRef}
-                  onClick={toggleHangar}
-                  disabled={isSaving}
-                  className={`group relative overflow-hidden px-8 py-4 border transition-all duration-500 ${
-                    isSaved ? "border-blue-500 bg-blue-600/20 text-blue-400" : "border-white/20 hover:border-blue-500 text-white"
-                  }`}
+        {/* 3D MODEL */}
+        <div ref={carRef} className="relative z-10 w-full h-[70vh] flex items-center justify-center transform translate-y-10">
+            <CarView modelUrl={car.modelUrl} selectedColor={selectedColor} />
+        </div>
+
+        {/* PREMIUM PRICE CARD */}
+        <div ref={priceCardRef} className="absolute bottom-12 left-8 md:left-20 z-20">
+            <div className="bg-white/[0.03] backdrop-blur-xl border border-white/10 p-8 rounded-tr-[40px] rounded-bl-[40px] shadow-2xl">
+              <p className="text-blue-500 font-mono text-[10px] uppercase tracking-[0.5em] mb-2">Ex-Showroom Price</p>
+              <h2 className="text-5xl md:text-7xl font-black italic tracking-tighter mb-6">
+                <span className="text-2xl font-light not-italic mr-2">$</span>
+                {car.price?.toLocaleString()}
+              </h2>
+              
+            </div>
+        </div>
+
+        {/* ENHANCED COLOR PICKER */}
+        <div className="absolute bottom-12 right-8 md:right-20 z-30 flex flex-col items-end gap-5">
+          <p className="text-[10px] uppercase tracking-[0.4em] font-bold text-zinc-400 italic">Custom Paintwork</p>
+          <div className="flex gap-6 p-4 px-8 rounded-full bg-zinc-900/40 backdrop-blur-2xl border border-white/10 shadow-xl">
+            {COLOR_OPTIONS.map((c) => (
+              <button
+                key={c.hex}
+                onClick={() => setSelectedColor(c.hex)}
+                className={`w-7 h-7 rounded-full transition-all duration-500 hover:scale-125 ${
+                  selectedColor === c.hex 
+                    ? "ring-[3px] ring-blue-500 ring-offset-[6px] ring-offset-black scale-125 shadow-[0_0_20px_rgba(59,130,246,0.5)]" 
+                    : "opacity-40"
+                }`}
+                style={{ backgroundColor: c.hex }}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 2: GSAP STATS STRIP WITH HEADER */}
+      <section ref={statsRef} className="relative bg-[#050505] py-40 border-y border-white/5 overflow-hidden">
+        {/* Subtle Section Header to fill the blank feel */}
+        <div className="max-w-7xl mx-auto px-10 mb-20">
+            <div className="flex items-center gap-4 mb-4">
+                <div className="h-[1px] w-12 bg-blue-600" />
+                <span className="text-blue-500 font-mono text-xs tracking-[0.4em] uppercase">Performance Metrics</span>
+            </div>
+            <h3 className="text-4xl md:text-6xl font-black italic tracking-tighter uppercase">Technical Superiority.</h3>
+        </div>
+
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-blue-600/5 blur-[150px] pointer-events-none" />
+        
+        <div className="max-w-7xl mx-auto px-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 md:gap-10">
+            {carStats.map((stat, i) => (
+                <div 
+                  key={i} 
+                  ref={(el) => { if (el) statItems.current[i] = el; }}
+                  className="group relative flex flex-col gap-3 p-10 rounded-3xl bg-white/[0.02] border border-white/5 hover:border-blue-500/30 transition-all duration-700"
                 >
-                  <div className="relative z-10 flex items-center gap-3">
-                    <div className={`w-2 h-2 rounded-full ${isSaved ? "bg-blue-500 shadow-[0_0_10px_#2563eb]" : "bg-zinc-500 animate-pulse"}`} />
-                    <span className="text-[10px] font-black uppercase tracking-[0.2em]">
-                      {isSaving ? "SYNCING..." : isSaved ? "UNIT DOCKED" : "ADD TO HANGAR"}
-                    </span>
-                  </div>
-                  <div className="absolute inset-0 bg-blue-600 translate-y-full group-hover:translate-y-0 transition-transform duration-300 -z-0 opacity-10" />
-                </button>
-             </div>
-          </div>
-
-          <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3">
-            <p className="text-[8px] uppercase tracking-[0.4em] font-bold text-zinc-500">Body Finish</p>
-            <div className="bg-zinc-900/50 backdrop-blur-3xl border border-white/10 p-3 px-6 rounded-2xl flex gap-5">
-              {COLOR_OPTIONS.map((c) => (
-                <button
-                  key={c.hex}
-                  onClick={() => setSelectedColor(c.hex)}
-                  className={`w-6 h-6 rounded-full transition-all duration-500 ${
-                    selectedColor === c.hex ? "ring-2 ring-blue-500 ring-offset-4 ring-offset-black scale-125 shadow-lg shadow-blue-500/20" : "opacity-40 hover:opacity-100"
-                  }`}
-                  style={{ backgroundColor: c.hex }}
-                />
-              ))}
-            </div>
-          </div>
-        </div>
-
-        <div className="relative z-10 grid grid-cols-2 gap-8 md:gap-16 border-t border-white/5 pt-10 w-full max-w-3xl px-6 mt-4">
-            <div className="flex flex-col items-center border-r border-white/5">
-              <p className="text-zinc-500 text-[10px] uppercase font-bold tracking-widest mb-2 italic">Powertrain</p>
-              <p className="font-mono text-white text-2xl md:text-3xl uppercase italic font-black tracking-tighter">
-                {car.stats?.engine || "V8_TT"}
-              </p>
-            </div>
-            <div className="flex flex-col items-center">
-              <p className="text-zinc-500 text-[10px] uppercase font-bold tracking-widest mb-2 italic">Max Output</p>
-              <p className="font-mono text-white text-2xl md:text-3xl uppercase italic font-black tracking-tighter">
-                {car.stats?.power || "740 HP"}
-              </p>
-            </div>
+                    <div className="absolute top-0 left-0 h-[2px] w-0 bg-blue-600 transition-all duration-700 group-hover:w-full" />
+                    <span className="text-zinc-500 font-mono text-[10px] font-bold uppercase tracking-[0.4em] group-hover:text-blue-500 transition-colors">{stat.label}</span>
+                    <span className="text-5xl md:text-6xl font-black italic uppercase tracking-tighter">{stat.value}</span>
+                    <div className="mt-4 h-[1px] w-8 bg-zinc-800 transition-all duration-500 group-hover:w-16 group-hover:bg-blue-600" />
+                </div>
+            ))}
         </div>
       </section>
 
