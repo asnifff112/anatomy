@@ -9,18 +9,15 @@ function Model({ url }: { url: string }) {
 
   useLayoutEffect(() => {
     if (scene) {
-      // പഴയ സ്കെയിൽ റീസെറ്റ് ചെയ്യുന്നു
       scene.scale.set(1, 1, 1);
       
       const box = new THREE.Box3().setFromObject(scene);
       const size = box.getSize(new THREE.Vector3());
       const maxDim = Math.max(size.x, size.y, size.z);
       
-      // എല്ലാ കാറിനും ഒരേ വലിപ്പം (Standard Size: 4.0)
       const scaleFactor = 4.0 / maxDim;
       scene.scale.set(scaleFactor, scaleFactor, scaleFactor);
       
-      // സെന്ററിൽ പ്ലേസ് ചെയ്യുന്നു
       const center = box.getCenter(new THREE.Vector3());
       scene.position.x -= center.x * scaleFactor;
       scene.position.y -= center.y * scaleFactor;
