@@ -20,14 +20,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Sidebar Entrance
       gsap.from(sidebarRef.current, { 
         x: -100, 
         opacity: 0, 
         duration: 1, 
         ease: "power3.out" 
       });
-      // Main Content Entrance
       gsap.from(contentRef.current, { 
         opacity: 0, 
         y: 20, 
@@ -48,7 +46,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   return (
     <div className="flex min-h-screen bg-[#0a0a0c] text-white overflow-hidden">
-      {/* SIDEBAR */}
       <aside 
         ref={sidebarRef}
         className="w-64 border-r border-white/5 bg-[#0d0d0f] flex flex-col sticky top-0 h-screen z-20"

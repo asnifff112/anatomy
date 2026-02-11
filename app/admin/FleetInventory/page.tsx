@@ -38,9 +38,8 @@ export default function FleetInventoryPage() {
     fetchCars();
   }, []);
 
-  // Recovery & Deactivation Logic
   const toggleStatus = async (car: CarType) => {
-    const newStatus = car.isAvailable === false; // true if currently false, false if currently true
+    const newStatus = car.isAvailable === false; 
     try {
       const response = await fetch(`http://localhost:5000/cars/${car.id}`, {
         method: "PATCH",
@@ -63,7 +62,6 @@ export default function FleetInventoryPage() {
 
   return (
     <div className="space-y-8 p-6 bg-black min-h-screen">
-      {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-center gap-6">
         <div>
           <h1 className="text-3xl font-black italic tracking-tighter text-white uppercase flex items-center gap-3">
@@ -94,11 +92,9 @@ export default function FleetInventoryPage() {
             }`}
           >
             <div className="flex flex-col sm:flex-row gap-6 p-4">
-              {/* Display Area */}
               <div className="relative w-full sm:w-52 h-44 bg-zinc-950 rounded-[24px] flex items-center justify-center border border-white/5">
                 <Car size={50} className={`${car.isAvailable === false ? 'text-red-900/30' : 'text-zinc-800 group-hover:text-blue-500/20'} transition-all`} />
                 
-                {/* Status Badge */}
                 <div className="absolute top-4 left-4 flex items-center gap-2 px-3 py-1 bg-black/80 rounded-full border border-white/10">
                   <div className={`h-1.5 w-1.5 rounded-full ${car.isAvailable !== false ? 'bg-emerald-500 animate-pulse' : 'bg-red-500'}`} />
                   <span className="text-[8px] font-black uppercase tracking-widest text-zinc-400">
@@ -107,7 +103,6 @@ export default function FleetInventoryPage() {
                 </div>
               </div>
 
-              {/* Data Area */}
               <div className="flex-1 flex flex-col justify-between">
                 <div>
                   <div className="flex justify-between items-start">
@@ -127,7 +122,6 @@ export default function FleetInventoryPage() {
                   </div>
                 </div>
 
-                {/* Unified Recovery/Deactivate Button */}
                 <div className="mt-6 flex gap-2">
                   {car.isAvailable === false ? (
                     <button 
