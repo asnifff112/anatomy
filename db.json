@@ -44,7 +44,8 @@
           "price": "$8,500",
           "image": "/parts/porsche_rims.png"
         }
-      ]
+      ],
+      "isAvailable": true
     },
     {
       "id": "m4-competition",
@@ -91,21 +92,44 @@
         }
       ]
     },
-    {
-      "id": "toyota-fortuner",
-      "name": "Toyota Fortuner",
-      "price": "$12,000",
-      "modelUrl": "/fortuner.glb",
-      "labScale": 1.2,
-      "cardScale": 0.8,
+   {
+      "id": "toyota-fortuner-gr",
+      "name": "Toyota Fortuner Legender GR-S",
+      "price": "52,500",
+      "modelUrl": "/models/fortuner.glb",
+      "labScale": 1.4,
+      "cardScale": 0.7,
       "stats": {
-        "engine": "2.7L Petrol Engine",
-        "power": "Petrol: ~164–166 HP",
-        "topSpeed": "175–190 km/h",
-        "acceleration": "9.5–10.5 seconds"
+        "engine": "2.8L 4-Cylinder Turbo Diesel",
+        "power": "201 HP",
+        "torque": "500 NM",
+        "topSpeed": "190 KM/H",
+        "acceleration": "9.8s (0-100)",
+        "weight": "2180 KG"
       },
-      "features": [],
-      "parts": []
+      "features": [
+        {
+          "id": "f1",
+          "title": "Sigma-4 4WD System",
+          "description": "Advanced multi-terrain select system with high/low range electronic transfer case",
+          "video": ""
+        },
+        {
+          "id": "f2",
+          "title": "GR-S Suspension",
+          "description": "Monotube shock absorbers tuned for high-speed stability and off-road comfort.",
+          "video": ""
+        }
+      ],
+      "parts": [
+        {
+          "id": "gd_engine",
+          "name": "1GD-FTV Diesel Block",
+          "description": "High-torque turbocharged diesel engine built for extreme durability.\"",
+          "price": "12,500",
+          "image": ""
+        }
+      ]
     }
   ],
   "users": [

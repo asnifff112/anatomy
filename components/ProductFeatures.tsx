@@ -53,18 +53,29 @@ export default function ProductFeatures({ features }: { features: Feature[] }) {
           >
             <div className="w-full md:w-3/5 relative group">
               <div className="absolute -inset-1 bg-blue-600/20 rounded-2xl blur-xl group-hover:opacity-100 transition duration-700 opacity-0"></div>
-              <div className="relative aspect-video rounded-xl overflow-hidden border border-white/10 shadow-2xl">
-                <video
-                  src={feature.video}
-                  autoPlay loop muted playsInline
-                  className="w-full h-full object-cover"
-                />
+              <div className="relative aspect-video rounded-xl overflow-hidden border border-white/10 shadow-2xl bg-gray-900">
+                
+                {feature.video && feature.video.trim() !== "" ? (
+                  <video
+                    src={feature.video}
+                    autoPlay 
+                    loop 
+                    muted 
+                    playsInline
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="flex items-center justify-center h-full">
+                    <p className="text-gray-500 text-sm">Preview not available</p>
+                  </div>
+                )}
+                
               </div>
             </div>
 
             <div className="w-full md:w-2/5 space-y-6">
               <span className="text-blue-500 font-mono text-sm tracking-widest uppercase">Component_{feature.id}</span>
-              <h3 className="text-3xl font-bold uppercase italic tracking-tight italic">
+              <h3 className="text-3xl font-bold uppercase italic tracking-tight">
                 {feature.title}
               </h3>
               <p className="text-gray-400 text-lg font-light leading-relaxed">

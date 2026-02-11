@@ -35,7 +35,7 @@ export default function LabPage() {
         }
       } catch (err) {
         console.error(err);
-        toast.error("CONNECTION_ERROR_04X");
+        toast.error("SYSTEM_OFFLINE_04X");
       } finally {
         setLoading(false);
       }
@@ -51,18 +51,15 @@ export default function LabPage() {
     return (
       <div className="h-screen bg-[#020202] flex flex-col items-center justify-center">
         <div className="w-12 h-12 border-2 border-blue-500/20 border-t-blue-500 rounded-full animate-spin mb-4" />
-        <div className="text-blue-500 font-mono text-[10px] tracking-[0.8em] uppercase animate-pulse">
-          Initializing_Hangar
-        </div>
+        <div className="text-blue-500 font-mono text-[10px] tracking-[0.8em] uppercase animate-pulse">Initializing_Hangar</div>
       </div>
     );
   }
 
   return (
     <main className="relative w-full h-screen bg-[#020202] text-zinc-100 overflow-hidden font-sans">
-      
-      {/* Side Inventory - Slimmer & Cleaner */}
-      <div className="absolute left-0 top-0 h-full w-72 bg-black/20 backdrop-blur-2xl z-30 border-r border-white/5 flex flex-col">
+      {/* Sidebar Inventory */}
+      <div className="absolute left-0 top-0 h-full w-72 bg-black/40 backdrop-blur-3xl z-30 border-r border-white/5 flex flex-col">
         <div className="p-8 pb-4">
           <div className="flex items-center gap-2 mb-1">
             <Cpu size={14} className="text-blue-500" />
@@ -73,7 +70,7 @@ export default function LabPage() {
 
         <div className="px-6 mb-4">
           <div className="relative group">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3 h-3 text-zinc-500 group-focus-within:text-blue-500 transition-colors" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3 h-3 text-zinc-500" />
             <input 
               type="text"
               placeholder="SEARCH_UNIT..."
@@ -89,18 +86,12 @@ export default function LabPage() {
               key={car.id}
               onClick={() => setSelectedCar(car)}
               className={`group p-4 cursor-pointer transition-all duration-500 rounded-sm border ${
-                selectedCar.id === car.id 
-                ? "bg-blue-600/5 border-blue-500/40" 
-                : "bg-transparent border-transparent hover:bg-white/5"
+                selectedCar.id === car.id ? "bg-blue-600/5 border-blue-500/40" : "bg-transparent border-transparent hover:bg-white/5"
               }`}
             >
               <div className="flex justify-between items-start mb-1">
-                <span className={`text-[7px] font-mono tracking-widest ${selectedCar.id === car.id ? "text-blue-400" : "text-zinc-600"}`}>
-                  #{car.id.padStart(3, '0')}
-                </span>
-                {selectedCar.id === car.id && (
-                  <motion.div layoutId="active-dot" className="w-1 h-1 bg-blue-500 rounded-full shadow-[0_0_8px_#3b82f6]" />
-                )}
+                <span className={`text-[7px] font-mono tracking-widest ${selectedCar.id === car.id ? "text-blue-400" : "text-zinc-600"}`}>#{car.id.padStart(3, '0')}</span>
+                {selectedCar.id === car.id && <motion.div layoutId="active-dot" className="w-1 h-1 bg-blue-500 rounded-full shadow-[0_0_8px_#3b82f6]" />}
               </div>
               <h3 className="font-bold uppercase italic text-xs tracking-tight group-hover:translate-x-1 transition-transform">{car.name}</h3>
               <p className="text-zinc-500 text-[9px] font-mono mt-0.5">{car.price}</p>
@@ -109,15 +100,15 @@ export default function LabPage() {
         </div>
       </div>
 
-      {/* 3D Viewport - Centered properly */}
+      {/* 3D Viewport */}
       <div className="absolute inset-0 z-10 ml-72">
         <AnimatePresence mode="wait">
           <motion.div
             key={selectedCar.id}
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 1.05 }}
-            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.8 }}
             className="w-full h-full"
           >
             <LabView modelUrl={selectedCar.modelUrl} />
@@ -125,15 +116,10 @@ export default function LabPage() {
         </AnimatePresence>
       </div>
 
-      {/* Data HUD - Downsized for elegance */}
-      <div className="absolute bottom-12 right-12 z-20 text-right pointer-events-none">
-        <motion.div
-          key={`data-${selectedCar.id}`}
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.2 }}
-        >
-          <div className="mb-8">
+      {/* HUD Details */}
+      <div className="absolute bottom-12 right-12 z-20 text-right">
+        <motion.div key={`data-${selectedCar.id}`} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}>
+          <div className="mb-6">
              <span className="text-blue-500 text-[9px] font-mono tracking-[0.5em] uppercase mb-2 block">Prototype_v2.6</span>
              <h2 className="text-5xl font-black italic uppercase tracking-tighter leading-none">{selectedCar.name}</h2>
           </div>
@@ -142,23 +128,22 @@ export default function LabPage() {
             <div className="flex justify-end gap-12 bg-white/[0.02] backdrop-blur-md p-5 border-r border-blue-500/50">
               <div className="text-right">
                 <span className="text-zinc-500 text-[8px] font-bold uppercase tracking-[0.2em] flex items-center justify-end gap-2 mb-1">
-                  <Zap size={10} className="text-blue-500"/> Power_Output
+                  <Zap size={10} className="text-blue-500"/> Power
                 </span>
-                <p className="text-xl font-bold italic tracking-tight">{selectedCar.stats.power}</p>
+                <p className="text-xl font-bold italic">{selectedCar.stats.power}</p>
               </div>
               <div className="text-right border-l border-white/5 pl-12">
                 <span className="text-zinc-500 text-[8px] font-bold uppercase tracking-[0.2em] flex items-center justify-end gap-2 mb-1">
-                  <Gauge size={10} className="text-blue-500"/> Core_Unit
+                  <Gauge size={10} className="text-blue-500"/> Engine
                 </span>
-                <p className="text-xl font-bold italic tracking-tight">{selectedCar.stats.engine}</p>
+                <p className="text-xl font-bold italic">{selectedCar.stats.engine}</p>
               </div>
             </div>
 
-            <Link href={`/products/${selectedCar.id}`} className="pointer-events-auto">
+            <Link href={`/products/${selectedCar.id}`}>
               <motion.button
-                whileHover={{ scale: 1.02, backgroundColor: "#1e40af" }}
-                whileTap={{ scale: 0.98 }}
-                className="flex items-center gap-4 bg-blue-600 text-white px-8 py-3.5 text-[10px] font-black italic uppercase tracking-[0.3em] skew-x-[-15deg] shadow-[0_0_30px_rgba(37,99,235,0.2)] transition-colors"
+                whileHover={{ scale: 1.05, backgroundColor: "#1e40af" }}
+                className="flex items-center gap-4 bg-blue-600 text-white px-8 py-3.5 text-[10px] font-black italic uppercase tracking-[0.3em] skew-x-[-15deg]"
               >
                 <span className="skew-x-[15deg]">Launch_Details</span>
                 <ArrowUpRight className="skew-x-[15deg]" size={16} />
@@ -167,14 +152,6 @@ export default function LabPage() {
           </div>
         </motion.div>
       </div>
-
-      {/* Background Subtle Elements */}
-      <div className="absolute top-10 right-12 text-[8px] font-mono text-zinc-700 tracking-[0.4em] z-0 uppercase pointer-events-none">
-        Location: Hangar_Alpha_01 // Status: Stable
-      </div>
-      
-      {/* Grid Decor - More Subtle */}
-      <div className="absolute inset-0 pointer-events-none opacity-[0.03] bg-[linear-gradient(to_right,#ffffff_1px,transparent_1px),linear-gradient(to_bottom,#ffffff_1px,transparent_1px)] bg-[size:60px_60px]" />
     </main>
   );
 }

@@ -14,7 +14,6 @@ function Model({ url, color }: { url: string; color: string }) {
       const size = box.getSize(new THREE.Vector3());
       const maxDim = Math.max(size.x, size.y, size.z);
       
-      // Standard scale factor (4.5 fits perfectly in the frame)
       const scaleFactor = 4.5 / maxDim;
       scene.scale.set(scaleFactor, scaleFactor, scaleFactor);
       
