@@ -86,7 +86,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           })}
         </nav>
 
-        {/* FOOTER ACTION */}
         <div className="p-6 border-t border-white/5 space-y-4">
           <div className="bg-white/[0.03] p-4 rounded-2xl border border-white/5">
             <p className="text-[10px] font-bold text-zinc-500 uppercase mb-2">System Status</p>
@@ -103,12 +102,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </div>
       </aside>
 
-      {/* MAIN CONTENT AREA */}
       <main 
         ref={contentRef}
         className="flex-1 flex flex-col h-screen overflow-hidden"
       >
-        {/* TOP NAVBAR */}
         <header className="h-20 border-b border-white/5 bg-[#0a0a0c]/50 backdrop-blur-md flex items-center justify-between px-8 z-10">
           <div>
             <h3 className="text-sm font-bold text-zinc-400">Welcome Back,</h3>
@@ -133,7 +130,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </div>
         </header>
 
-        {/* DYNAMIC CONTENT WRAPPER */}
         <div className="flex-1 overflow-y-auto custom-scrollbar p-8">
           <div className="max-w-7xl mx-auto">
             {children}
@@ -160,7 +156,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   );
 }
 
-// Helper icon for emerald plus
 function Plus({ size, className }: { size: number, className: string }) {
   return (
     <svg 
