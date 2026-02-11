@@ -15,7 +15,6 @@ export default function AdminDashboard() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // ഒരേ സമയം എല്ലാ ഡാറ്റയും ഫെച്ച് ചെയ്യുന്നു
         const [usersRes, carsRes] = await Promise.all([
           fetch("http://localhost:5000/users"),
           fetch("http://localhost:5000/cars")
@@ -24,11 +23,10 @@ export default function AdminDashboard() {
         const users = await usersRes.json();
         const cars = await carsRes.json();
 
-        // റിയൽ ടൈം കൗണ്ട് സെറ്റ് ചെയ്യുന്നു
         setStats({
           totalUsers: users.length,
           totalCars: cars.length,
-          wishlists: Math.floor(users.length * 1.5), // Example logic
+          wishlists: Math.floor(users.length * 1.5), 
           activeSessions: Math.floor(Math.random() * users.length) + 1
         });
       } catch (error) {
@@ -43,7 +41,6 @@ export default function AdminDashboard() {
 
   return (
     <div className="p-8 space-y-8 bg-[#060608] min-h-screen text-white font-sans">
-      {/* Header Section */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-4xl font-black uppercase tracking-tighter text-blue-500 italic">
@@ -59,7 +56,6 @@ export default function AdminDashboard() {
         </div>
       </div>
 
-      {/* Stats Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatCard 
           label="Total Pilots" 
@@ -91,7 +87,6 @@ export default function AdminDashboard() {
         />
       </div>
 
-      {/* Decorative System Box */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 bg-[#101014] border border-white/5 rounded-[32px] p-8 relative overflow-hidden group">
           <div className="absolute top-0 right-0 p-6 opacity-10 group-hover:opacity-20 transition-opacity">
