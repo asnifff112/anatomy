@@ -63,12 +63,10 @@ export default function LoginPage() {
         }
       }
 
-      // 3. ബ്ലോക്ക് അല്ലെങ്കിൽ മാത്രം AuthContext വഴി ലോഗിൻ ചെയ്യാൻ ശ്രമിക്കുന്നു
       const success = await login(email, password);
 
       if (success) {
         showToast("Access Granted: Welcome back, Pilot!", "success");
-        // ഇമെയിൽ നോക്കി അഡ്മിൻ ആണോ എന്ന് തിരിക്കുന്നു
         if (email === "admin@gmail.com") {
           router.push("/admin/dashboard");
         } else {
@@ -89,7 +87,6 @@ export default function LoginPage() {
   return (
     <main ref={containerRef} className="min-h-screen bg-black text-white flex items-center justify-center p-6 pt-32 relative overflow-hidden">
       
-      {/* Background Decor */}
       <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-600/10 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-red-600/10 rounded-full blur-[120px] pointer-events-none" />
 
