@@ -19,7 +19,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <AuthProvider>
           <Toaster position="top-center" reverseOrder={false} />
           
-          {/* Custom Cursor Component */}
           
               <TargetCursor 
         spinDuration={2}
