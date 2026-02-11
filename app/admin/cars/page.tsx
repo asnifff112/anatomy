@@ -113,7 +113,6 @@ const path = type === 'model'
     <div className="p-8 bg-[#060608] min-h-screen text-white font-sans selection:bg-blue-500/30">
       <Toaster position="top-right" reverseOrder={false} />
       
-      {/* HEADER */}
       <header className="flex justify-between items-center border-b border-white/5 pb-8 mb-8">
         <div className="flex items-center gap-4">
           <div className="p-3 bg-blue-500/10 rounded-2xl border border-blue-500/20">
@@ -133,7 +132,6 @@ const path = type === 'model'
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
         
-        {/* LEFT COLUMN: IDENTITY & SPECS */}
         <div className="space-y-6">
           <section className="bg-[#0c0c0e] p-8 rounded-[40px] border border-white/5 space-y-4 shadow-2xl">
             <h3 className="text-blue-500 text-[10px] font-black uppercase tracking-widest flex items-center gap-2"><Fingerprint size={14}/> Core Identity</h3>
@@ -192,7 +190,6 @@ const path = type === 'model'
           </section>
         </div>
 
-        {/* RIGHT COLUMN: INTERACTIVES */}
         <div className="space-y-8 overflow-y-auto max-h-[75vh] pr-4 custom-scrollbar">
           
           <section className="space-y-4">
@@ -263,7 +260,6 @@ const path = type === 'model'
         {loading ? <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div> : <><UploadCloud size={20}/> {editingId ? "Update Data" : "Save New Unit"}</>}
       </button>
 
-      {/* FOOTER MINI LIST */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 mt-12 pt-12 border-t border-white/5">
         {cars.map(car => (
           <div key={car.id} className="bg-[#0c0c0e] p-4 rounded-3xl border border-white/5 flex flex-col gap-3 group hover:border-blue-500/30 transition-all">
