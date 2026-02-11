@@ -12,7 +12,6 @@ export default function GaragePage() {
   const [wishlistCars, setWishlistCars] = useState<any[]>([]);
   const [isFetching, setIsFetching] = useState(true);
 
-  // പ്രീമിയം കാർ ടോസ്റ്റ് സ്റ്റൈൽ
   const showToast = (message: string, type: "success" | "error" | "warning") => {
     toast(message, {
       duration: 3000,
@@ -132,7 +131,6 @@ export default function GaragePage() {
           </div>
         </div>
 
-        {/* Grid Section */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {wishlistCars.map((car) => (
             <div

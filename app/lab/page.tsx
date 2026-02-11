@@ -116,7 +116,6 @@ export default function LabPage() {
         </AnimatePresence>
       </div>
 
-      {/* HUD Details */}
       <div className="absolute bottom-12 right-12 z-20 text-right">
         <motion.div key={`data-${selectedCar.id}`} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}>
           <div className="mb-6">
