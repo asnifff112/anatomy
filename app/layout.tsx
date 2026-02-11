@@ -11,7 +11,6 @@ import TargetCursor from "@/components/ui/TargetCursor";
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   
-  // Admin പേജുകളിൽ Navbar, Footer എന്നിവ ഒഴിവാക്കാൻ
   const isAdminPage = pathname.startsWith("/admin");
 
   return (
