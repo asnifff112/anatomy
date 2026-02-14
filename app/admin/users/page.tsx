@@ -13,7 +13,7 @@ interface User {
 export default function UserDetails() {
   const [users, setUsers] = useState<User[]>([]);
 
-  // 1. ഫെച്ച് യൂസേഴ്സ്
+ 
   useEffect(() => {
     fetch("http://localhost:5000/users")
       .then((res) => res.json())
@@ -21,13 +21,13 @@ export default function UserDetails() {
       .catch((err) => console.error("Error loading users:", err));
   }, []);
 
-  // 2. ബ്ലോക്ക്/അൺബ്ലോക്ക് ഫംഗ്ഷൻ
+ 
   const toggleUserStatus = async (userId: string, currentStatus: string) => {
     const newStatus = currentStatus === "Active" ? "Blocked" : "Active";
 
     try {
       const response = await fetch(`http://localhost:5000/users/${userId}`, {
-        method: "PATCH", // സ്റ്റാറ്റസ് മാത്രം മാറ്റാൻ PATCH മതി
+        method: "PATCH", 
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status: newStatus }),
       });
