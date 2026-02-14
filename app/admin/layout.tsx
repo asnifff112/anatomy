@@ -41,7 +41,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { name: "Add New Car", path: "/admin/cars", icon: <Plus size={20} className="text-emerald-500" /> }, // Car form
     { name: "Fleet Inventory", path: "/admin/FleetInventory", icon: <Database size={20} /> }, // Your new component
     { name: "User Control", path: "/admin/users", icon: <Users size={20} /> },
-    { name: "Settings", path: "/admin/settings", icon: <Settings size={20} /> },
+    
   ];
 
   return (

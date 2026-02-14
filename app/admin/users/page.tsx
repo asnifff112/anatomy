@@ -33,7 +33,7 @@ export default function UserDetails() {
       });
 
       if (response.ok) {
-        // UI-ൽ മാത്രം മാറ്റം വരുത്തുന്നു (വീണ്ടും ഫെച്ച് ചെയ്യാതെ)
+        
         setUsers((prev) =>
           prev.map((u) => (u.id === userId ? { ...u, status: newStatus as any } : u))
         );
@@ -77,7 +77,6 @@ export default function UserDetails() {
               </div>
             </div>
 
-            {/* Admin ആണെങ്കിൽ ബ്ലോക്ക് ബട്ടൺ കാണിക്കില്ല */}
             {user.role !== "Admin" ? (
               <button
                 onClick={() => toggleUserStatus(user.id, user.status)}
