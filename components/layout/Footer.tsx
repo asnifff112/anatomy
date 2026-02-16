@@ -19,6 +19,7 @@ export default function Footer() {
           Deconstructing the future of tech.
         </p>
       </div>
+     
 
       <div className="flex items-center gap-3 p-2 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl">
         {socialLinks.map((link) => (

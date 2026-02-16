@@ -57,9 +57,8 @@ export default function Navbar() {
           })}
         </div>
 
-        {/* 🛠️ Dynamic Button: Logout or Signup */}
         {user ? (
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-7">
              <span className="text-[9px] font-mono text-blue-500 uppercase tracking-tighter">
                 ID: {user.callsign || user.name.split(' ')[0]}
              </span>
